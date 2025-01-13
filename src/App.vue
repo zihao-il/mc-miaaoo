@@ -1,44 +1,52 @@
 <script lang="ts" setup>
-import {xbox_avatar, xbox_online, xbox_room} from "./axios";
-import {ref, reactive, onMounted} from "vue";
-import {RefreshRight, Sunny, Moon} from '@element-plus/icons-vue';
+import {mc_list, mc_join} from "./axios";
+import {ref, onMounted, reactive} from "vue";
+import {RefreshRight, Sunny, Moon, Setting} from '@element-plus/icons-vue';
 import {ElLoading, ElNotification} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
 import 'element-plus/es/components/notification/style/css'
 
 
-import zhCn from 'element-plus/es/locale/lang/zh-cn';
-
 import {isDark, toggleDark} from './dark';
 
 let room_data = ref<any[]>([]);
-let defaultAvatar: string = "Steve.webp";
-let avatars = ref<Record<string, any>>({});
-let dialogFormVisible = ref<boolean>(false);
-let dialogData = reactive({
-    room_count: 0,
-    room_title: "",
-    room_members: [] as any[],
-});
 let isNull = ref<string>("hide");
 const isDisabled = ref<boolean>(false);
+let dialogFormVisible = ref<boolean>(false);
+const dialogStyle = (): string => {
+    return window.innerWidth > 600 ? '600px' : '90%'
+}
 
+const sources = ref<{ id: number; name: string }[]>([
+    {id: 2, name: 'MultiMC23'},
+    {id: 3, name: 'gouhope'},
+]);
+
+import {useMCOnlineStore} from './store'
+
+const store = useMCOnlineStore()
 
 const getRoomData = async (): Promise<void> => {
     const loading = ElLoading.service({
         lock: true,
-        text: '加载中...',
+        text: '加載中...',
         background: 'rgba(0, 0, 0, 0.7)',
     })
 
-    const {data} = await xbox_online()
-    if (data.results.length === 0) {
-        isNull.value = ""
-    } else {
-        isNull.value = "hide"
-    }
+
+    const requests = sources.value.map(async (source) => {
+        const {data} = await mc_list(source.id.toString());
+        return data.results.map((room: any) => ({
+            ...room,
+            sourceName: source.name,
+            sourceId: source.id,
+        }));
+    });
+    const results = await Promise.all(requests);
+    room_data.value = results.flat();
+
+    isNull.value = room_data.value.length === 0 ? "" : "hide";
     loading.close()
-    room_data.value = data.results
 
 }
 
@@ -47,33 +55,17 @@ onMounted(() => {
     metaThemeColor();
 });
 
-const getAvatar = async (xuid: string): Promise<void> => {
-    try {
-        const {data} = await xbox_avatar({xuid});
-        avatars.value[xuid] = data.profileUsers[0].settings[0].value;
-    } catch (e) {
-        avatars.value[xuid] = defaultAvatar;
-    }
-};
-
-const getAvatarUrl = (xuid: string): string => {
-    if (!avatars.value[xuid]) {
-        getAvatar(xuid);
-        return defaultAvatar;
-    }
-    return avatars.value[xuid];
-};
 
 const gameMode = (mode: string, isHar: boolean): string => {
     switch (mode) {
         case "Survival":
-            return isHar ? "极限模式" : "生存模式";
+            return isHar ? "極限模式" : "生存模式";
         case "Creative":
-            return "创造模式";
+            return "創造模式";
         case "Adventure":
-            return "冒险模式";
+            return "冒險模式";
         case "Spectator":
-            return "旁观模式";
+            return "旁觀模式";
         default:
             return "未知模式";
     }
@@ -91,24 +83,6 @@ const changeTime = (time: string | number | Date): string => {
 
 }
 
-const getRoomInfo = async (uuid: string): Promise<JSON> => {
-    const {data} = await xbox_room({uuid: uuid})
-
-    dialogData.room_count = data.membersInfo.count
-    dialogData.room_title = data.properties.custom.hostName
-    dialogData.room_members = Object.values(data.members)
-
-    return data
-}
-
-const roomInfo = (uuid: string): void => {
-    dialogFormVisible.value = true
-    getRoomInfo(uuid)
-}
-
-const dialogStyle = (): string => {
-    return window.innerWidth > 600 ? '600px' : '90%'
-}
 
 const codes = {
     colors: {
@@ -204,24 +178,20 @@ const metaThemeColor = (): void => {
         metaThemeColor.setAttribute('content', isDark.value ? '#121212' : '#FFFFFF');
     }
 };
+
+const wsJoin = async (id: string, name: string): Promise<void> => {
+    const {data} = await mc_join(id, name);
+};
+
 </script>
 
 <template>
     <div class="common-layout">
         <el-container>
             <el-header>
-                <h2 class="title">Minecraft在线房间查看</h2>
+                <h2 class="title">Minecraft基岩版線上多人遊戲列表</h2>
             </el-header>
             <el-main>
-
-                <!--                <el-result :class="isNull" icon="info" title="空数据">-->
-                <!--                    <template #sub-title>-->
-                <!--                        <p>没有好友在玩Minecraft</p>-->
-                <!--                    </template>-->
-                <!--                    <template #extra>-->
-                <!--                        <el-button type="primary" @click="reload()">刷新</el-button>-->
-                <!--                    </template>-->
-                <!--                </el-result>-->
                 <el-scrollbar height="80vh">
                     <el-empty :class="isNull">
                         <template #description>
@@ -241,33 +211,26 @@ const metaThemeColor = (): void => {
                             <template #header>
                                 <div class="card-header">
 
-                                    <span class="gamerName"><el-image :src="getAvatarUrl(d.customProperties.ownerId)"
-                                                                      class="gamerAvatar"
-                                                                      style="width: 20px; height: 20px"/>{{
-                                            d.customProperties.hostName
-                                        }}</span>
-                                    <span class="header-right"><el-tag type="primary">{{
-                                            d.customProperties.ownerId
-                                        }}</el-tag></span>
+                                    <span class="gamerName"
+                                          v-html="parseMinecraftColors(d.customProperties.worldName)"></span>
                                 </div>
                             </template>
                             <template #default>
-                                <!--                                <p>地图名称：{{ d.customProperties.worldName }}</p>-->
-                                <p v-html="'地图名称：' + parseMinecraftColors(d.customProperties.worldName)"></p>
-                                <p>游戏模式：{{
-                                        gameMode(d.customProperties.worldType, d.customProperties.isHardcore)
-                                    }}</p>
-                                <p>
-                                    房间人数：{{ d.customProperties.MemberCount }}/{{
+                                <p>主機用戶：{{ d.customProperties.hostName }}</p>
+                                <p>房間人數：{{ d.customProperties.MemberCount }}/{{
                                         d.customProperties.MaxMemberCount
                                     }}</p>
-                                <p>开放时间：{{ changeTime(d.relatedInfo.postedTime) }}</p>
+                                <p>遊戲模式：{{
+                                        gameMode(d.customProperties.worldType, d.customProperties.isHardcore)
+                                    }}</p>
+                                <p>多人遊戲源：{{ d.sourceName }}</p>
+                                <p>開放時間：{{ changeTime(d.relatedInfo.postedTime) }}</p>
                             </template>
                             <template #footer>
                                 <el-tag type="primary">{{ d.customProperties.version }}</el-tag>
                                 <el-button class="check-btn" size="small" type="primary"
-                                           @click="roomInfo(d.sessionRef.name)">
-                                    查看详情
+                                           @click="wsJoin(d.id,d.sessionRef.name)">
+                                    顯示遊戲
                                 </el-button>
 
                             </template>
@@ -295,6 +258,11 @@ const metaThemeColor = (): void => {
 
 
     </div>
+    <el-affix :offset="20" class="set-right-bottom" position="bottom">
+        <el-button :icon="Setting" circle size="large" type="primary" @click="dialogFormVisible=true"></el-button>
+
+    </el-affix>
+
     <el-affix :offset="20" class="color-right-bottom" position="bottom">
         <el-button circle size="large" type="primary" @click="toggleDarkMode()">
             <el-icon style="cursor: pointer;">
@@ -313,38 +281,40 @@ const metaThemeColor = (): void => {
         <el-button :disabled="isDisabled" :icon="RefreshRight" circle size="large" type="primary"
                    @click="handleClick()"/>
     </el-affix>
-    <el-config-provider :locale="zhCn">
-        <el-dialog v-model="dialogFormVisible" :title="dialogData.room_title + ' 的房间'" :width="dialogStyle()"
-                   height="300">
-            <el-table :data="dialogData.room_members" border resizable stripe style="width: 100%;">
-                <el-table-column align="center" header-align="center" label="头像">
-                    <template #default="scope">
-                        <el-image :src="getAvatarUrl(scope.row.constants.system.xuid)"
-                                  style="width: 25px; height: 25px"/>
-                    </template>
-                </el-table-column>
-                <el-table-column align="center" header-align="center" label="玩家昵称" prop="gamertag" sortable>
-                    <template #default="scope">
-                        <span>{{ scope.row.gamertag }}</span>
-                    </template>
-                </el-table-column>
 
-                <el-table-column align="center" header-align="center" label="加入时间" prop="joinTime" sortable>
-                    <template #default="scope">
-                        <span>{{ changeTime(scope.row.joinTime) }}</span>
-                    </template>
-                </el-table-column>
-            </el-table>
+    <el-dialog v-model="dialogFormVisible" :width="dialogStyle()" height="300"
+               title="設定">
+        <el-row>
+            <el-col :span="24" class="setText">
+                <el-text size="large">顯示設定</el-text>
+            </el-col>
+            <el-col :span="24">
+                <el-checkbox-group v-model="store.ShowRoom">
+                    <el-checkbox :value="{ id: 0, name: 'unavailable' }" label="隱藏不可加入的多人遊戲"/>
+                    <el-checkbox :value="{id: 2, name: 'MultiMC23'}" label="顯示MultiMC23的多人遊戲"/>
+                    <el-checkbox :value="{ id: 3, name: 'gouhope' }" label="顯示gouhope的多人遊戲"/>
+                </el-checkbox-group>
+            </el-col>
+            <el-col :span="24" class="setText">
+                <el-text size="large">加入設定（已加誰為好友）</el-text>
+            </el-col>
+            <el-col :span="24">
+                <el-radio-group v-model="store.Friends">
 
-            <template #footer>
-                <div class="dialog-footer">
-                    <el-tag type="primary">共{{ dialogData.room_count }}人</el-tag>
-                </div>
-            </template>
-        </el-dialog>
-    </el-config-provider>
+                    <el-radio :value="JSON.stringify({ id: 2, name: 'MultiMC23' })" size="large">MultiMC23（好友已滿，不要再加了）
+                    </el-radio>
+                    <el-radio :value="JSON.stringify({ id: 3, name: 'gouhope' })" size="large">gouhope（新用戶選這個）
+                    </el-radio>
+                </el-radio-group>
+            </el-col>
+        </el-row>
 
-
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button type="primary" @click="dialogFormVisible = false">確定</el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 
 <style scoped>
@@ -437,6 +407,19 @@ const metaThemeColor = (): void => {
     z-index: 999;
     right: 20px;
     bottom: 80px;
+}
+
+.set-right-bottom {
+    position: fixed;
+    z-index: 999;
+    right: 20px;
+    bottom: 145px;
+
+}
+
+.setText {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 </style>

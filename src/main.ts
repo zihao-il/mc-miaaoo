@@ -2,5 +2,10 @@ import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 import 'element-plus/theme-chalk/dark/css-vars.css'
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
-createApp(App).mount('#zihao_il')
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
+createApp(App).use(pinia).mount('#zihao_il')

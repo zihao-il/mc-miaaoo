@@ -1,8 +1,8 @@
 {
-  "name": "MC房间查看",
-  "short_name": "MC房间查看",
+  "name": "Minecraft基岩版線上多人遊戲列表",
+  "short_name": "Minecraft基岩版線上多人遊戲列表",
   "start_url": ".",
-  "description": "Minecraft在线房间查看",
+  "description": "Minecraft基岩版線上多人遊戲列表",
   "display": "standalone",
   "orientation": "portrait-primary",
   "prefer_related_applications": false,
