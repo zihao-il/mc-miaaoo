@@ -148,9 +148,13 @@ const parseMinecraftColors = (text: string): string => {
             const formatStyle = codes.formats[code as keyof typeof codes.formats] || "";
             return `<span style="${colorStyle}${formatStyle}">`;
         } else if (unicodeChar) {
-            const spriteIndex = unicodeChar.codePointAt(0)! - 0xe100;
-            const backgroundStyle = `background: url('/glyph_E1.png') no-repeat -${spriteIndex * 16}px 0px; background-size:256px 256px; width: 1em; height: 1em; display: inline-block;`;
-            return `<span style="${backgroundStyle}"></span>`;
+            const unicodeValue = unicodeChar.codePointAt(0)?.toString(16).toUpperCase();
+            if (unicodeValue !== undefined && unicodeValue >= 0xE100 && unicodeValue <= 0xE113) {
+                const svgPath = `/svg/${unicodeValue.toString(16).toUpperCase()}.svg`;
+                return `<img src="${svgPath}" alt="${unicodeChar}" style="width: 1em; display: inline-block;" />`;
+            }
+            return `<span>${unicodeChar}</span>`;
+
         }
         return match; // Default fallback
     }).replace(/<\/span>/g, () => isRandom ? `</span><span></span>` : "</span>");
@@ -294,7 +298,8 @@ const inputBtn = (): void => {
                         <el-tag>{{ room_count }}</el-tag>
                         個房間
                     </el-col>
-                    <el-col></el-col>
+                    <el-col>
+                    </el-col>
                 </el-row>
 
 
@@ -389,7 +394,7 @@ const inputBtn = (): void => {
         <el-button :disabled="isDisabled" :icon="RefreshRight" circle size="large" type="primary"
                    @click="handleClick()"/>
     </el-affix>
-
+    <el-backtop :bottom="80" :right="80"/>
     <el-dialog v-model="dialogFormVisible" :width="dialogStyle()" height="300"
                title="設定">
         <el-row>
@@ -456,6 +461,7 @@ const inputBtn = (): void => {
 
 @media (max-width: 600px) {
     .card-header {
+        display: block;
         align-items: flex-start;
         flex-direction: column;
     }
@@ -475,6 +481,9 @@ const inputBtn = (): void => {
 .gamerName {
     font-size: 20px;
     font-weight: bold;
+    flex: 1;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 .gamerAvatar {
