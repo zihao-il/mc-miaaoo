@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {mc_list, mc_join} from "./axios";
 import {ref, onMounted} from "vue";
-import {RefreshRight, Sunny, Moon, Setting} from '@element-plus/icons-vue';
+import {RefreshRight, Sunny, Moon, Setting, Search} from '@element-plus/icons-vue';
 import {ElLoading, ElNotification} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
 import 'element-plus/es/components/notification/style/css'
@@ -10,10 +10,14 @@ import 'element-plus/es/components/notification/style/css'
 import {isDark, toggleDark} from './dark';
 
 let room_data = ref<any[]>([]);
+let room_count = ref<number>(0);
+let newRoom = ref<any[]>([]);
 let isNull = ref<string>("hide");
 const isDisabled = ref<boolean>(false);
 let dialogFormVisible = ref<boolean>(false);
 const clickedButtons = new Set<string>();
+const searchName = ref<string>('hostName')
+const seachContent = ref('')
 const dialogStyle = (): string => {
     return window.innerWidth > 600 ? '600px' : '90%'
 }
@@ -46,7 +50,8 @@ const getRoomData = async (): Promise<void> => {
             return !(room.customProperties.MemberCount >= room.customProperties.MaxMemberCount || room.customProperties.BroadcastSetting !== 3);
         });
     }
-
+    newRoom.value = room_data.value
+    room_count.value = room_data.value.length;
     isNull.value = room_data.value.length === 0 ? "" : "hide";
     loading.close()
 
@@ -230,7 +235,31 @@ const isBtnDisabled = (MemberCount: number, MaxMemberCount: number, BroadcastSet
     }
     return false;
 };
+const searchBtn = (): void => {
+    room_data.value = newRoom.value;
+    if (searchName.value === 'hostName') {
+        room_data.value = room_data.value.filter((room: any) => {
+            return room.customProperties.worldName.includes(seachContent.value);
+        });
+    } else {
+        room_data.value = room_data.value.filter((room: any) => {
+            return room.customProperties.hostName.includes(seachContent.value);
+        });
 
+    }
+
+}
+const clearBtn = (): void => {
+    console.log(1)
+    room_data.value = newRoom.value;
+
+}
+const inputBtn = (): void => {
+    if (seachContent.value === '') {
+        room_data.value = newRoom.value;
+    }
+
+}
 
 </script>
 
@@ -238,7 +267,37 @@ const isBtnDisabled = (MemberCount: number, MaxMemberCount: number, BroadcastSet
     <div class="common-layout">
         <el-container>
             <el-header>
-                <h2 class="title">Minecraft基岩版線上多人遊戲列表</h2>
+                <el-row class="header-container" justify="center">
+                    <el-col><h2 class="title">Minecraft基岩版線上多人遊戲列表</h2></el-col>
+                    <el-col :span="21" class="input-with-select">
+                        <el-input
+                            v-model="seachContent"
+                            clearable
+                            placeholder="輸入搜索內容"
+                            style="min-width: auto"
+                            @clear="clearBtn()"
+                            @input="inputBtn()"
+                        >
+                            <template #prepend>
+                                <el-select v-model="searchName" style="width: auto;min-width: 100px;">
+                                    <el-option label="房間名" value="hostName"/>
+                                    <el-option label="用戶名" value="userName"/>
+                                </el-select>
+                            </template>
+                            <template #append>
+                                <el-button :icon="Search" @click="searchBtn()"/>
+                            </template>
+                        </el-input>
+                    </el-col>
+                    <el-col class="room-total">
+                        共有
+                        <el-tag>{{ room_count }}</el-tag>
+                        個房間
+                    </el-col>
+                    <el-col></el-col>
+                </el-row>
+
+
             </el-header>
             <el-main>
                 <el-scrollbar height="100%">
@@ -256,7 +315,7 @@ const isBtnDisabled = (MemberCount: number, MaxMemberCount: number, BroadcastSet
                     <div class="card-container">
 
 
-                        <el-card v-for="d in room_data" :key="d.customProperties.ownerId" class="centered-card">
+                        <el-card v-for="d in room_data" class="centered-card">
                             <template #header>
                                 <div class="card-header">
 
@@ -472,4 +531,18 @@ const isBtnDisabled = (MemberCount: number, MaxMemberCount: number, BroadcastSet
     margin-bottom: 10px;
 }
 
+.el-header {
+    --el-header-height: auto;
+}
+
+.input-with-select {
+    max-width: 700px !important;
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+}
+
+.room-total {
+
+    text-align: center;
+}
 </style>
