@@ -13,6 +13,7 @@ let room_data = ref<any[]>([]);
 let isNull = ref<string>("hide");
 const isDisabled = ref<boolean>(false);
 let dialogFormVisible = ref<boolean>(false);
+const clickedButtons = new Set<string>();
 const dialogStyle = (): string => {
     return window.innerWidth > 600 ? '600px' : '90%'
 }
@@ -180,10 +181,27 @@ const metaThemeColor = (): void => {
     }
 };
 
-const wsJoin = async (id: string, name: string): Promise<void> => {
-    // const {data} = await mc_join(id, name);
-    console.log(id)
-    console.log(name)
+const wsJoin = async (id: string, name: string, sourceName: string, sourceId: number): Promise<void> => {
+    if (clickedButtons.has(id)) return;
+    clickedButtons.add(id);
+
+
+    const Friends = JSON.parse(store.Friends)
+    const setId = Friends.id
+    const setName = Friends.name
+    await mc_join(setId, id, name);
+    if (setName !== sourceName) {
+
+        await mc_join(sourceId, id, name);
+
+    }
+    ElNotification({
+        title: '加入成功！',
+        message: '快進遊戲查看吧！',
+        type: 'success',
+        zIndex: 9999
+    });
+    clickedButtons.delete(id);
 };
 
 const joinBtn = (MemberCount: number, MaxMemberCount: number, BroadcastSetting: number): string => {
@@ -216,7 +234,7 @@ const isBtnDisabled = (MemberCount: number, MaxMemberCount: number, BroadcastSet
                 <h2 class="title">Minecraft基岩版線上多人遊戲列表</h2>
             </el-header>
             <el-main>
-                <el-scrollbar height="80vh">
+                <el-scrollbar height="100%">
                     <el-empty :class="isNull">
                         <template #description>
                             <p>
@@ -253,10 +271,10 @@ const isBtnDisabled = (MemberCount: number, MaxMemberCount: number, BroadcastSet
                             <template #footer>
                                 <el-tag type="primary">{{ d.customProperties.version }}</el-tag>
                                 <el-button
-                                    :disabled="isBtnDisabled(d.customProperties.MemberCount, d.customProperties.MaxMemberCount, d.customProperties.BroadcastSetting)"
+                                    :disabled="isBtnDisabled(d.customProperties.MemberCount, d.customProperties.MaxMemberCount, d.customProperties.BroadcastSetting) || clickedButtons.has(d.id)"
                                     class="check-btn" size="small"
                                     type="primary"
-                                    @click="wsJoin(d.id,d.sessionRef.name)">
+                                    @click="wsJoin(d.id,d.sessionRef.name ,d.sourceName, d.sourceId)">
                                     {{
                                         joinBtn(d.customProperties.MemberCount, d.customProperties.MaxMemberCount, d.customProperties.BroadcastSetting)
                                     }}
@@ -424,6 +442,7 @@ const isBtnDisabled = (MemberCount: number, MaxMemberCount: number, BroadcastSet
     position: fixed;
     z-index: 999;
     right: 20px;
+    bottom: 20px;
 }
 
 .color-right-bottom {
@@ -437,7 +456,7 @@ const isBtnDisabled = (MemberCount: number, MaxMemberCount: number, BroadcastSet
     position: fixed;
     z-index: 99999;
     right: 20px;
-    bottom: 145px;
+    bottom: 140px;
 
 }
 

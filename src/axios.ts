@@ -20,14 +20,14 @@ export const mc_list = (id: string): Promise<any> => {
     })
 }
 
-export const mc_join = (source: number,listid: string, sessionname: string): Promise<any> => {
+export const mc_join = (listId: number,roomId: string, sessionName: string): Promise<any> => {
     return request({
         url: '/join',
         method: 'post',
         params: {
-            source : source,
-            listid: listid,
-            sessionname: sessionname
+            listid: listId,
+            roomid : roomId,
+            sessionname: sessionName
         }
     })
 }
