@@ -182,6 +182,12 @@ const metaThemeColor = (): void => {
 };
 
 const wsJoin = async (id: string, name: string, sourceName: string, sourceId: number): Promise<void> => {
+    ElNotification({
+        title: '加入中...',
+        message: '正在加入中請稍等！',
+        type: 'warning',
+        zIndex: 9999
+    });
     if (clickedButtons.has(id)) return;
     clickedButtons.add(id);
 
@@ -189,10 +195,11 @@ const wsJoin = async (id: string, name: string, sourceName: string, sourceId: nu
     const Friends = JSON.parse(store.Friends)
     const setId = Friends.id
     const setName = Friends.name
-    await mc_join(setId, id, name);
+    await mc_join(sourceId, id, name);
     if (setName !== sourceName) {
-
-        await mc_join(sourceId, id, name);
+        const {data} = await mc_list(setId.toString())
+        const matchingResult = data.results.find((result: any) => result.sessionRef.name === name);
+        await mc_join(setId, matchingResult.id, name);
 
     }
     ElNotification({
