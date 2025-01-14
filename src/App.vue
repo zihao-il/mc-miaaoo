@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {mc_list, mc_join} from "./axios";
-import {ref, onMounted, reactive} from "vue";
+import {ref, onMounted} from "vue";
 import {RefreshRight, Sunny, Moon, Setting} from '@element-plus/icons-vue';
 import {ElLoading, ElNotification} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
@@ -17,10 +17,6 @@ const dialogStyle = (): string => {
     return window.innerWidth > 600 ? '600px' : '90%'
 }
 
-const sources = ref<{ id: number; name: string }[]>([
-    {id: 2, name: 'MultiMC23'},
-    {id: 3, name: 'gouhope'},
-]);
 
 import {useMCOnlineStore} from './store'
 
@@ -33,8 +29,8 @@ const getRoomData = async (): Promise<void> => {
         background: 'rgba(0, 0, 0, 0.7)',
     })
 
-
-    const requests = sources.value.map(async (source) => {
+    let sources = store.ShowRoom
+    const requests = sources.filter((source) => source.id !== 0).map(async (source) => {
         const {data} = await mc_list(source.id.toString());
         return data.results.map((room: any) => ({
             ...room,
@@ -44,17 +40,22 @@ const getRoomData = async (): Promise<void> => {
     });
     const results = await Promise.all(requests);
     room_data.value = results.flat();
+    if (sources.find((source) => source.id === 0)) {
+        room_data.value = room_data.value.filter((room: any) => {
+            return !(room.customProperties.MemberCount >= room.customProperties.MaxMemberCount || room.customProperties.BroadcastSetting !== 3);
+        });
+    }
 
     isNull.value = room_data.value.length === 0 ? "" : "hide";
     loading.close()
 
-}
+};
+
 
 onMounted(() => {
     getRoomData();
     metaThemeColor();
 });
-
 
 const gameMode = (mode: string, isHar: boolean): string => {
     switch (mode) {
@@ -180,8 +181,31 @@ const metaThemeColor = (): void => {
 };
 
 const wsJoin = async (id: string, name: string): Promise<void> => {
-    const {data} = await mc_join(id, name);
+    // const {data} = await mc_join(id, name);
+    console.log(id)
+    console.log(name)
 };
+
+const joinBtn = (MemberCount: number, MaxMemberCount: number, BroadcastSetting: number): string => {
+    if (MemberCount >= MaxMemberCount) {
+        return "人數已滿";
+    }
+    if (BroadcastSetting !== 3) {
+        return "限制加入";
+    }
+    return "顯示房間";
+};
+
+const isBtnDisabled = (MemberCount: number, MaxMemberCount: number, BroadcastSetting: number): boolean => {
+    if (MemberCount >= MaxMemberCount) {
+        return true;
+    }
+    if (BroadcastSetting !== 3) {
+        return true;
+    }
+    return false;
+};
+
 
 </script>
 
@@ -228,9 +252,14 @@ const wsJoin = async (id: string, name: string): Promise<void> => {
                             </template>
                             <template #footer>
                                 <el-tag type="primary">{{ d.customProperties.version }}</el-tag>
-                                <el-button class="check-btn" size="small" type="primary"
-                                           @click="wsJoin(d.id,d.sessionRef.name)">
-                                    顯示遊戲
+                                <el-button
+                                    :disabled="isBtnDisabled(d.customProperties.MemberCount, d.customProperties.MaxMemberCount, d.customProperties.BroadcastSetting)"
+                                    class="check-btn" size="small"
+                                    type="primary"
+                                    @click="wsJoin(d.id,d.sessionRef.name)">
+                                    {{
+                                        joinBtn(d.customProperties.MemberCount, d.customProperties.MaxMemberCount, d.customProperties.BroadcastSetting)
+                                    }}
                                 </el-button>
 
                             </template>
@@ -241,17 +270,12 @@ const wsJoin = async (id: string, name: string): Promise<void> => {
             </el-main>
             <el-footer>
                 <div class="footer">
-                    <p>
-                        Xbox：
-                        <el-link href="https://www.xbox.com/zh-CN/play/user/zihaoil"
-                                 type="primary">zihaoil
-                        </el-link>
 
-                    </p>
-                    <p>
-                        欢迎：
-                        <el-link href="https://bbk.endyun.ltd/realms/" type="primary">加入基岩版领域</el-link>
-                    </p>
+                    友鏈：
+                    <el-link href="https://mcxbox.pages.dev/"
+                             type="primary">MC房间查看
+                    </el-link>
+
                 </div>
             </el-footer>
         </el-container>
@@ -404,14 +428,14 @@ const wsJoin = async (id: string, name: string): Promise<void> => {
 
 .color-right-bottom {
     position: fixed;
-    z-index: 999;
+    z-index: 99999;
     right: 20px;
     bottom: 80px;
 }
 
 .set-right-bottom {
     position: fixed;
-    z-index: 999;
+    z-index: 99999;
     right: 20px;
     bottom: 145px;
 
