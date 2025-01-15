@@ -162,9 +162,9 @@ const parseMinecraftColors = (text: string): string => {
             return `<span style="${colorStyle}${formatStyle}">`;
         } else if (unicodeChar) {
             const unicodeValue = unicodeChar.codePointAt(0)?.toString(16).toUpperCase();
-            if (unicodeValue !== undefined && unicodeValue >= 0xE100 && unicodeValue <= 0xE113) {
+            if (unicodeValue !== undefined && unicodeValue >= "E100" && unicodeValue <= "E113") {
                 const svgPath = `/svg/${unicodeValue.toString(16).toUpperCase()}.svg`;
-                return `<img src="${svgPath}" alt="${unicodeChar}" style="width: 1em; display: inline-block;" />`;
+                return `<img src="${svgPath}" alt="${unicodeChar}" style="height: 1em; display: inline-block;" />`;
             }
             return `<span>${unicodeChar}</span>`;
 
@@ -298,7 +298,7 @@ const inputBtn = (): void => {
 
 }
 
-const changeLanguage= (): void => {
+const changeLanguage = (): void => {
     setLocale(store.Language)
 }
 
@@ -465,10 +465,10 @@ const changeLanguage= (): void => {
             <el-col :span="24">
                 <el-radio-group v-model="store.Language" @change="changeLanguage()">
 
-                    <el-radio value="zhHans" size="large">
+                    <el-radio size="large" value="zhHans">
                         {{ $t('setting.zhHans') }}
                     </el-radio>
-                    <el-radio value="zhHant" size="large">
+                    <el-radio size="large" value="zhHant">
                         {{ $t('setting.zhHant') }}
                     </el-radio>
                 </el-radio-group>

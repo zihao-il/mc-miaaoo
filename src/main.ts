@@ -8,5 +8,5 @@ import { createI18nInstance } from './locale';
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
-const i18n = createI18nInstance('zhHans');
+const i18n = createI18nInstance();
 createApp(App).use(pinia).use(i18n).mount('#zihao_il')
