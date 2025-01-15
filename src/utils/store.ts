@@ -4,7 +4,7 @@ export const useMCOnlineStore = defineStore('MCOnline', {
     state: () => ({
         Friends: "{\"id\":3,\"name\":\"gouhope\"}",
         ShowRoom: [{id: 2, name: 'MultiMC23'}, {id: 3, name: 'gouhope'}],
-
+        Language: "zhHant"
     }),
     actions: {
         setFriends(data: string) {
@@ -12,6 +12,9 @@ export const useMCOnlineStore = defineStore('MCOnline', {
         },
         setShowRoom(data: any[]) {
             this.ShowRoom = data
+        },
+        setLanguage(data: string) {
+            this.Language = data
         },
 
     },

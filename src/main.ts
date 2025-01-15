@@ -4,8 +4,9 @@ import App from './App.vue'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import { createI18nInstance } from './locale';
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
-
-createApp(App).use(pinia).mount('#zihao_il')
+const i18n = createI18nInstance('zhHans');
+createApp(App).use(pinia).use(i18n).mount('#zihao_il')

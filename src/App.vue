@@ -1,13 +1,19 @@
 <script lang="ts" setup>
-import {mc_list, mc_join} from "./axios";
-import {ref, onMounted} from "vue";
+import {mc_list, mc_join} from "./utils/axios";
+import {ref, onMounted, h} from "vue";
 import {RefreshRight, Sunny, Moon, Setting, Search} from '@element-plus/icons-vue';
 import {ElLoading, ElNotification} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
 import 'element-plus/es/components/notification/style/css'
 
 
-import {isDark, toggleDark} from './dark';
+import {isDark, toggleDark} from './utils/dark';
+
+import {setLocale} from "./locale";
+
+import {useI18n} from 'vue-i18n';
+
+const {t} = useI18n();
 
 let room_data = ref<any[]>([]);
 let room_count = ref<number>(0);
@@ -23,21 +29,27 @@ const dialogStyle = (): string => {
 }
 
 
-import {useMCOnlineStore} from './store'
+import {useMCOnlineStore} from './utils/store'
 
 const store = useMCOnlineStore()
 
 const getRoomData = async (): Promise<void> => {
     const loading = ElLoading.service({
         lock: true,
-        text: '加載中...',
+        text: t('locale.loading'),
         background: 'rgba(0, 0, 0, 0.7)',
     })
 
     let sources = store.ShowRoom
     const requests = sources.filter((source) => source.id !== 0).map(async (source) => {
         const {data} = await mc_list(source.id.toString());
-        return data.results.map((room: any) => ({
+        const uniqueRooms = new Map<string, any>();
+        data.results.forEach((room: any) => {
+            if (!uniqueRooms.has(room.sessionRef.name)) {
+                uniqueRooms.set(room.sessionRef.name, room);
+            }
+        });
+        return Array.from(uniqueRooms.values()).map((room: any) => ({
             ...room,
             sourceName: source.name,
             sourceId: source.id,
@@ -59,6 +71,7 @@ const getRoomData = async (): Promise<void> => {
 
 
 onMounted(() => {
+    setLocale(store.Language)
     getRoomData();
     metaThemeColor();
 });
@@ -66,15 +79,15 @@ onMounted(() => {
 const gameMode = (mode: string, isHar: boolean): string => {
     switch (mode) {
         case "Survival":
-            return isHar ? "極限模式" : "生存模式";
+            return isHar ? t('mode.hardcore') : t('mode.survival');
         case "Creative":
-            return "創造模式";
+            return t('mode.creative');
         case "Adventure":
-            return "冒險模式";
+            return t('mode.adventure');
         case "Spectator":
-            return "旁觀模式";
+            return t('mode.spectator');
         default:
-            return "未知模式";
+            return t('mode.unknown');
     }
 };
 
@@ -164,8 +177,8 @@ const parseMinecraftColors = (text: string): string => {
 const handleClick = (): void => {
     if (isDisabled.value) return;
     ElNotification({
-        title: '刷新成功！',
-        message: '请勿多次点击！',
+        title: t('locale.refresh'),
+        message: t('locale.refreshMessage'),
         type: 'success',
         zIndex: 9999
     });
@@ -192,8 +205,8 @@ const metaThemeColor = (): void => {
 
 const wsJoin = async (id: string, name: string, sourceName: string, sourceId: number): Promise<void> => {
     ElNotification({
-        title: '加入中...',
-        message: '正在加入中請稍等！',
+        title: t('locale.joining'),
+        message: t('locale.joiningMessage'),
         type: 'warning',
         zIndex: 9999
     });
@@ -212,22 +225,43 @@ const wsJoin = async (id: string, name: string, sourceName: string, sourceId: nu
 
     }
     ElNotification({
-        title: '加入成功！',
-        message: '快進遊戲查看吧！',
+        title: t('locale.Joins'),
+        message: h('div', [
+            h('p', t('locale.JoinsMessage')),
+            h(
+                'button',
+                {
+                    style: {
+                        marginTop: '10px',
+                        padding: '5px 10px',
+                        backgroundColor: '#409EFF',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                    },
+                    onClick: () => {
+                        window.location.href = "minecraft://";
+                    },
+                },
+                t('locale.mcStart')
+            ),
+        ]),
         type: 'success',
-        zIndex: 9999
+        zIndex: 9999,
+        dangerouslyUseHTMLString: false,
     });
     clickedButtons.delete(id);
 };
 
 const joinBtn = (MemberCount: number, MaxMemberCount: number, BroadcastSetting: number): string => {
     if (MemberCount >= MaxMemberCount) {
-        return "人數已滿";
+        return t('button.full');
     }
     if (BroadcastSetting !== 3) {
-        return "限制加入";
+        return t('button.limit');
     }
-    return "顯示房間";
+    return t('button.show');
 };
 
 const isBtnDisabled = (MemberCount: number, MaxMemberCount: number, BroadcastSetting: number): boolean => {
@@ -254,7 +288,6 @@ const searchBtn = (): void => {
 
 }
 const clearBtn = (): void => {
-    console.log(1)
     room_data.value = newRoom.value;
 
 }
@@ -265,6 +298,10 @@ const inputBtn = (): void => {
 
 }
 
+const changeLanguage= (): void => {
+    setLocale(store.Language)
+}
+
 </script>
 
 <template>
@@ -272,20 +309,20 @@ const inputBtn = (): void => {
         <el-container>
             <el-header>
                 <el-row class="header-container" justify="center">
-                    <el-col><h2 class="title">Minecraft基岩版線上多人遊戲列表</h2></el-col>
+                    <el-col><h2 class="title">{{ $t('locale.title') }}</h2></el-col>
                     <el-col :span="21" class="input-with-select">
                         <el-input
                             v-model="seachContent"
+                            :placeholder="$t('search.placeholder')"
                             clearable
-                            placeholder="輸入搜索內容"
                             style="min-width: auto"
                             @clear="clearBtn()"
                             @input="inputBtn()"
                         >
                             <template #prepend>
                                 <el-select v-model="searchName" style="width: auto;min-width: 100px;">
-                                    <el-option label="房間名" value="hostName"/>
-                                    <el-option label="用戶名" value="userName"/>
+                                    <el-option :label="$t('search.hostName')" value="hostName"/>
+                                    <el-option :label="$t('search.userName')" value="userName"/>
                                 </el-select>
                             </template>
                             <template #append>
@@ -294,9 +331,9 @@ const inputBtn = (): void => {
                         </el-input>
                     </el-col>
                     <el-col class="room-total">
-                        共有
+                        {{ $t('total.all') }}
                         <el-tag>{{ room_count }}</el-tag>
-                        個房間
+                        {{ $t('total.room') }}
                     </el-col>
                     <el-col>
                     </el-col>
@@ -309,10 +346,10 @@ const inputBtn = (): void => {
                     <el-empty :class="isNull">
                         <template #description>
                             <p>
-                                没有好友在玩Minecraft
+                                {{ $t('locale.null') }}
                             </p>
                             <p>
-                                快来添加我为好友吧！
+                                {{ $t('locale.friend') }}
                             </p>
                         </template>
                     </el-empty>
@@ -329,15 +366,15 @@ const inputBtn = (): void => {
                                 </div>
                             </template>
                             <template #default>
-                                <p>主機用戶：{{ d.customProperties.hostName }}</p>
-                                <p>房間人數：{{ d.customProperties.MemberCount }}/{{
+                                <p>{{ $t('room.hostName') }}{{ d.customProperties.hostName }}</p>
+                                <p>{{ $t('room.MemberCount') }}{{ d.customProperties.MemberCount }}/{{
                                         d.customProperties.MaxMemberCount
                                     }}</p>
-                                <p>遊戲模式：{{
+                                <p>{{ $t('room.gameMode') }}{{
                                         gameMode(d.customProperties.worldType, d.customProperties.isHardcore)
                                     }}</p>
-                                <p>多人遊戲源：{{ d.sourceName }}</p>
-                                <p>開放時間：{{ changeTime(d.relatedInfo.postedTime) }}</p>
+                                <p>{{ $t('room.sourceName') }}{{ d.sourceName }}</p>
+                                <p>{{ $t('room.postedTime') }}{{ changeTime(d.relatedInfo.postedTime) }}</p>
                             </template>
                             <template #footer>
                                 <el-tag type="primary">{{ d.customProperties.version }}</el-tag>
@@ -360,7 +397,7 @@ const inputBtn = (): void => {
             <el-footer>
                 <div class="footer">
 
-                    友鏈：
+                    {{ $t('locale.link') }}
                     <el-link href="https://mcxbox.pages.dev/"
                              type="primary">MC房间查看
                     </el-link>
@@ -395,28 +432,44 @@ const inputBtn = (): void => {
                    @click="handleClick()"/>
     </el-affix>
     <el-backtop :bottom="80" :right="80"/>
-    <el-dialog v-model="dialogFormVisible" :width="dialogStyle()" height="300"
-               title="設定">
+    <el-dialog v-model="dialogFormVisible" :title="$t('setting.title')" :width="dialogStyle()"
+               height="300">
         <el-row>
             <el-col :span="24" class="setText">
-                <el-text size="large">顯示設定</el-text>
+                <el-text size="large">{{ $t('setting.display') }}</el-text>
             </el-col>
             <el-col :span="24">
                 <el-checkbox-group v-model="store.ShowRoom">
-                    <el-checkbox :value="{ id: 0, name: 'unavailable' }" label="隱藏不可加入的多人遊戲"/>
-                    <el-checkbox :value="{id: 2, name: 'MultiMC23'}" label="顯示MultiMC23的多人遊戲"/>
-                    <el-checkbox :value="{ id: 3, name: 'gouhope' }" label="顯示gouhope的多人遊戲"/>
+                    <el-checkbox :label="$t('setting.notJoin')" :value="{ id: 0, name: 'unavailable' }"/>
+                    <el-checkbox :label="$t('setting.show1')" :value="{id: 2, name: 'MultiMC23'}"/>
+                    <el-checkbox :label="$t('setting.show2')" :value="{ id: 3, name: 'gouhope' }"/>
                 </el-checkbox-group>
             </el-col>
             <el-col :span="24" class="setText">
-                <el-text size="large">加入設定（已加誰為好友）</el-text>
+                <el-text size="large">{{ $t('setting.joinSetting') }}</el-text>
             </el-col>
             <el-col :span="24">
                 <el-radio-group v-model="store.Friends">
 
-                    <el-radio :value="JSON.stringify({ id: 2, name: 'MultiMC23' })" size="large">MultiMC23（好友已滿，不要再加了）
+                    <el-radio :value="JSON.stringify({ id: 2, name: 'MultiMC23' })" size="large">
+                        {{ $t('setting.joinUser1') }}
                     </el-radio>
-                    <el-radio :value="JSON.stringify({ id: 3, name: 'gouhope' })" size="large">gouhope（新用戶選這個）
+                    <el-radio :value="JSON.stringify({ id: 3, name: 'gouhope' })" size="large">
+                        {{ $t('setting.joinUser2') }}
+                    </el-radio>
+                </el-radio-group>
+            </el-col>
+            <el-col :span="24" class="setText">
+                <el-text size="large">{{ $t('setting.language') }}</el-text>
+            </el-col>
+            <el-col :span="24">
+                <el-radio-group v-model="store.Language" @change="changeLanguage()">
+
+                    <el-radio value="zhHans" size="large">
+                        {{ $t('setting.zhHans') }}
+                    </el-radio>
+                    <el-radio value="zhHant" size="large">
+                        {{ $t('setting.zhHant') }}
                     </el-radio>
                 </el-radio-group>
             </el-col>
@@ -424,7 +477,7 @@ const inputBtn = (): void => {
 
         <template #footer>
             <div class="dialog-footer">
-                <el-button type="primary" @click="dialogFormVisible = false">確定</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">{{ $t('setting.enter') }}</el-button>
             </div>
         </template>
     </el-dialog>
