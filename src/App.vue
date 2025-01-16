@@ -162,7 +162,8 @@ const parseMinecraftColors = (text: string): string => {
             return `<span style="${colorStyle}${formatStyle}">`;
         } else if (unicodeChar) {
             const unicodeValue = unicodeChar.codePointAt(0)?.toString(16).toUpperCase();
-            if (unicodeValue !== undefined && unicodeValue >= "E100" && unicodeValue <= "E113") {
+            let unicodeNumber = Number(unicodeValue.slice(1));
+            if (unicodeNumber >= 100 && unicodeNumber <= 113) {
                 const svgPath = `/svg/${unicodeValue.toString(16).toUpperCase()}.svg`;
                 return `<img src="${svgPath}" alt="${unicodeChar}" style="height: 1em; display: inline-block;" />`;
             }
