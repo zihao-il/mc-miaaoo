@@ -19,6 +19,7 @@ const createI18nInstance = () => {
 const setLocale = (locale: string) => {
     if (i18n) {
         i18n.global.locale.value = locale;
+        document.title = i18n.global.t('locale.title');
     }
 };
 export {createI18nInstance, setLocale};
