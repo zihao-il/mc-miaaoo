@@ -22,6 +22,7 @@ export default defineConfig({
             resolvers: [ElementPlusResolver()],
         }),
     ],
+    base: '/',
     server: {
         host: '0.0.0.0',
     },
