@@ -39,6 +39,8 @@
   "locale.joiningMessage": "正在加入中...请稍后！",
   "locale.Joins": "加入成功！",
   "locale.JoinsMessage": "快进游戏看看吧！",
+  "locale.JoinsError": "加入失败！",
+  "locale.JoinsErrorMessage": "刷新后再重新加入试试吧！",
   "locale.mcStart": "启动 MC！",
   "button.full": "人数已满",
   "button.limit": "限制加入",

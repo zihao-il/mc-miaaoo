@@ -218,13 +218,27 @@ const wsJoin = async (id: string, name: string, sourceName: string, sourceId: nu
     const Friends = JSON.parse(store.Friends)
     const setId = Friends.id
     const setName = Friends.name
-    await mc_join(sourceId, id, name);
-    if (setName !== sourceName) {
-        const {data} = await mc_list(setId.toString())
-        const matchingResult = data.results.find((result: any) => result.sessionRef.name === name);
-        await mc_join(setId, matchingResult.id, name);
+    try {
+        await mc_join(sourceId, id, name);
+        if (setName !== sourceName) {
+            const {data} = await mc_list(setId.toString())
+            const matchingResult = data.results.find((result: any) => result.sessionRef.name === name);
+            await mc_join(setId, matchingResult.id, name);
+
+        }
+    } catch (e) {
+        ElNotification({
+            title: t('locale.JoinsError'),
+            message: t('locale.JoinsErrorMessage'),
+            type: 'error',
+            zIndex: 9999
+        });
+        return;
+    } finally {
+        clickedButtons.delete(id);
 
     }
+
     ElNotification({
         title: t('locale.Joins'),
         message: h('div', [
@@ -252,7 +266,6 @@ const wsJoin = async (id: string, name: string, sourceName: string, sourceId: nu
         zIndex: 9999,
         dangerouslyUseHTMLString: false,
     });
-    clickedButtons.delete(id);
 };
 
 const joinBtn = (MemberCount: number, MaxMemberCount: number, BroadcastSetting: number): string => {
