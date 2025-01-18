@@ -375,7 +375,7 @@ const changeLanguage = (): void => {
                                         gameMode(d.customProperties.worldType, d.customProperties.isHardcore)
                                     }}</p>
                                 <p>{{ $t('room.sourceName') }}{{ d.sourceName }}</p>
-                                <p>{{ $t('room.postedTime') }}{{ changeTime(d.relatedInfo.postedTime) }}</p>
+                                <p>{{ $t('room.createTime') }}{{ changeTime(d.createTime) }}</p>
                             </template>
                             <template #footer>
                                 <el-tag type="primary">{{ d.customProperties.version }}</el-tag>
