@@ -2,7 +2,7 @@ import axios from 'axios'
 import type {AxiosInstance} from 'axios'
 
 const request: AxiosInstance = axios.create({
-    baseURL: 'https://mc.miaaoo.com:10100/',
+    baseURL: 'https://mc.miaaoo.com:10101/',
     timeout: 30000,
     headers: {
         'Content-Type': 'application/json',
@@ -10,23 +10,21 @@ const request: AxiosInstance = axios.create({
 })
 
 
-export const mc_list = (id: string): Promise<any> => {
+export const mc_list = (): Promise<any> => {
     return request({
-        url: '/list',
+        url: '/test-list',
         method: 'post',
-        params: {
-            id: id
-        }
     })
 }
 
-export const mc_join = (listId: number,roomId: string, sessionName: string): Promise<any> => {
+export const mc_join = (roomFrom: string, addId: number, roomId: string, sessionName: string): Promise<any> => {
     return request({
-        url: '/join',
+        url: '/test-join',
         method: 'post',
         params: {
-            listid: listId,
-            roomid : roomId,
+            roomfrom: roomFrom,
+            addid: addId,
+            roomid: roomId,
             sessionname: sessionName
         }
     })

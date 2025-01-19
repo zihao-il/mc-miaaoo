@@ -41,22 +41,9 @@ const getRoomData = async (): Promise<void> => {
     })
 
     let sources = store.ShowRoom
-    const requests = sources.filter((source) => source.id !== 0).map(async (source) => {
-        const {data} = await mc_list(source.id.toString());
-        const uniqueRooms = new Map<string, any>();
-        data.results.forEach((room: any) => {
-            if (!uniqueRooms.has(room.sessionRef.name)) {
-                uniqueRooms.set(room.sessionRef.name, room);
-            }
-        });
-        return Array.from(uniqueRooms.values()).map((room: any) => ({
-            ...room,
-            sourceName: source.name,
-            sourceId: source.id,
-        }));
-    });
-    const results = await Promise.all(requests);
-    room_data.value = results.flat();
+    const {data} = await mc_list();
+
+    room_data.value = data.results;
     if (sources.find((source) => source.id === 0)) {
         room_data.value = room_data.value.filter((room: any) => {
             return !(room.customProperties.MemberCount >= room.customProperties.MaxMemberCount || room.customProperties.BroadcastSetting !== 3);
@@ -204,7 +191,7 @@ const metaThemeColor = (): void => {
     }
 };
 
-const wsJoin = async (id: string, name: string, sourceName: string, sourceId: number): Promise<void> => {
+const wsJoin = async (roomFrom: string, id: string, name: string): Promise<void> => {
     ElNotification({
         title: t('locale.joining'),
         message: t('locale.joiningMessage'),
@@ -214,18 +201,10 @@ const wsJoin = async (id: string, name: string, sourceName: string, sourceId: nu
     if (clickedButtons.has(id)) return;
     clickedButtons.add(id);
 
-
     const Friends = JSON.parse(store.Friends)
     const setId = Friends.id
-    const setName = Friends.name
     try {
-        await mc_join(sourceId, id, name);
-        if (setName !== sourceName) {
-            const {data} = await mc_list(setId.toString())
-            const matchingResult = data.results.find((result: any) => result.sessionRef.name === name);
-            await mc_join(setId, matchingResult.id, name);
-
-        }
+        await mc_join(roomFrom, setId, id, name);
     } catch (e) {
         ElNotification({
             title: t('locale.JoinsError'),
@@ -387,7 +366,6 @@ const changeLanguage = (): void => {
                                 <p>{{ $t('room.gameMode') }}{{
                                         gameMode(d.customProperties.worldType, d.customProperties.isHardcore)
                                     }}</p>
-                                <p>{{ $t('room.sourceName') }}{{ d.sourceName }}</p>
                                 <p>{{ $t('room.createTime') }}{{ changeTime(d.createTime) }}</p>
                             </template>
                             <template #footer>
@@ -396,7 +374,7 @@ const changeLanguage = (): void => {
                                     :disabled="isBtnDisabled(d.customProperties.MemberCount, d.customProperties.MaxMemberCount, d.customProperties.BroadcastSetting) || clickedButtons.has(d.id)"
                                     class="check-btn" size="small"
                                     type="primary"
-                                    @click="wsJoin(d.id,d.sessionRef.name ,d.sourceName, d.sourceId)">
+                                    @click="wsJoin(d.roomfrom,d.id,d.sessionRef.name)">
                                     {{
                                         joinBtn(d.customProperties.MemberCount, d.customProperties.MaxMemberCount, d.customProperties.BroadcastSetting)
                                     }}
