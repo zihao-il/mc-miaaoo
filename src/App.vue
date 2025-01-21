@@ -443,8 +443,6 @@ const handleNotifyBtn = (): void => {
             <el-col :span="24">
                 <el-checkbox-group v-model="store.ShowRoom">
                     <el-checkbox :label="$t('setting.notJoin')" :value="{ id: 0, name: 'unavailable' }"/>
-                    <el-checkbox :label="$t('setting.show1')" :value="{id: 2, name: 'MultiMC23'}"/>
-                    <el-checkbox :label="$t('setting.show2')" :value="{ id: 3, name: 'gouhope' }"/>
                 </el-checkbox-group>
             </el-col>
             <el-col :span="24" class="setText">
@@ -472,6 +470,9 @@ const handleNotifyBtn = (): void => {
                     </el-radio>
                     <el-radio size="large" value="zhHant">
                         {{ $t('setting.zhHant') }}
+                    </el-radio>
+                    <el-radio size="large" value="en">
+                        {{ $t('setting.en') }}
                     </el-radio>
                 </el-radio-group>
             </el-col>
@@ -510,6 +511,9 @@ const handleNotifyBtn = (): void => {
                         </el-radio>
                         <el-radio size="large" value="zhHant">
                             {{ $t('setting.zhHant') }}
+                        </el-radio>
+                        <el-radio size="large" value="en">
+                            {{ $t('setting.en') }}
                         </el-radio>
                     </el-radio-group>
                 </div>

@@ -1,5 +1,7 @@
 import zhHans from './zh-Hans.json'
 import zhHant from './zh-Hant.json'
+import en from './en.json'
+
 import {createI18n} from 'vue-i18n';
 
 let i18n: any;
@@ -7,11 +9,12 @@ let i18n: any;
 const createI18nInstance = () => {
     i18n = createI18n({
         globalInjection: true,
-        locale: 'zhHant',
-        fallbackLocale: 'zhHans',
+        locale: 'zhHans',
+        fallbackLocale: 'zhHant',
         messages: {
             zhHans,
-            zhHant
+            zhHant,
+            en
         }
     });
     return i18n;
