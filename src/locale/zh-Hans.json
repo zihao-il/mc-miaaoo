@@ -44,6 +44,7 @@
   "button.full": "人数已满",
   "button.limit": "限制加入",
   "button.show": "显示房间",
+  "notify.title": "公告",
   "notify.placeholder": "请确认您已阅读以上内容",
   "notify.text1": "请输入“我已阅读”或“I have read”或“我已閱讀”以继续访问：",
   "notify.text2": "使用方法：",

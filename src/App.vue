@@ -489,10 +489,10 @@ const handleNotifyBtn = (): void => {
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :show-close="false"
+        :title="$t('notify.title')"
         :width="dialogStyle()"
         :z-index="99999"
         class="dialogNotify"
-        title="公告"
     >
         <p class="notify-text"><strong>{{ t('notify.text2') }}</strong>{{ t('notify.text3') }}</p>
         <p class="notify-text">{{ t('notify.text1') }}</p>
