@@ -21,9 +21,12 @@ let newRoom = ref<any[]>([]);
 let isNull = ref<string>("hide");
 const isDisabled = ref<boolean>(false);
 let dialogFormVisible = ref<boolean>(false);
+let dialogNotifyVisible = ref<boolean>(false);
 const clickedButtons = new Set<string>();
 const searchName = ref<string>('hostName')
 const seachContent = ref('')
+const inputNotify = ref('')
+
 const dialogStyle = (): string => {
     return window.innerWidth > 600 ? '600px' : '90%'
 }
@@ -61,6 +64,7 @@ onMounted(() => {
     setLocale(store.Language)
     getRoomData();
     metaThemeColor();
+    dialogNotifyVisible.value = store.Notify
 });
 
 const gameMode = (mode: string, isHar: boolean): string => {
@@ -294,6 +298,12 @@ const inputBtn = (): void => {
 const changeLanguage = (): void => {
     setLocale(store.Language)
 }
+const handleNotifyBtn = (): void => {
+    if (inputNotify.value === '我已阅读' || inputNotify.value === 'I have read' || inputNotify.value === '我已閱讀') {
+        dialogNotifyVisible.value = false
+        store.Notify = false
+    }
+}
 
 </script>
 
@@ -473,6 +483,44 @@ const changeLanguage = (): void => {
             </div>
         </template>
     </el-dialog>
+
+    <el-dialog
+        v-model="dialogNotifyVisible"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
+        :show-close="false"
+        :width="dialogStyle()"
+        :z-index="99999"
+        class="dialogNotify"
+        title="公告"
+    >
+        <p class="notify-text"><strong>{{ t('notify.text2') }}</strong>{{ t('notify.text3') }}</p>
+        <p class="notify-text">{{ t('notify.text1') }}</p>
+        <el-input
+            v-model="inputNotify"
+            :placeholder="$t('notify.placeholder')"
+            clearable
+        ></el-input>
+        <template #footer>
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div>
+                    <el-radio-group v-model="store.Language" @change="changeLanguage()">
+                        <el-radio size="large" value="zhHans">
+                            {{ $t('setting.zhHans') }}
+                        </el-radio>
+                        <el-radio size="large" value="zhHant">
+                            {{ $t('setting.zhHant') }}
+                        </el-radio>
+                    </el-radio-group>
+                </div>
+                <div>
+                    <el-button type="primary" @click="handleNotifyBtn()">
+                        {{ t('setting.enter') }}
+                    </el-button>
+                </div>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 
 <style scoped>
@@ -598,5 +646,10 @@ const changeLanguage = (): void => {
 .room-total {
 
     text-align: center;
+}
+
+.notify-text {
+    margin-bottom: 0.75em;
+
 }
 </style>

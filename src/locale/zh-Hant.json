@@ -43,5 +43,9 @@
   "locale.mcStart": "啟動 MC！",
   "button.full": "人數已滿",
   "button.limit": "限制加入",
-  "button.show": "顯示房間"
+  "button.show": "顯示房間",
+  "notify.placeholder": "請確認您已閱讀以上內容",
+  "notify.text1": "請輸入“我已阅读”或“I have read”或“我已閱讀”以繼續訪問：",
+  "notify.text2": "使用方法：",
+  "notify.text3": "先在 Minecraft 中添加好友“gouhope”，然後停留在“好友”標籤頁（即顯示“可加入的 Realms”和“可加入的好友”的頁面），返回網頁，點擊右下角的設置按鈕，選擇“gouhope”，然後選擇房間。點擊後，請查看網頁底部顯示操作是否成功。如果成功，請返回遊戲查看是否顯示房間。"
 }
