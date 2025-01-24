@@ -279,7 +279,7 @@ const searchBtn = (): void => {
         });
     } else {
         room_data.value = room_data.value.filter((room: any) => {
-            return room.customProperties.hostName.includes(seacrhContent.value);
+            return room.customProperties.hostName.includes(searchContent.value);
         });
 
     }
@@ -290,7 +290,7 @@ const clearBtn = (): void => {
 
 }
 const inputBtn = (): void => {
-    if (seachrContent.value === '') {
+    if (searchContent.value === '') {
         room_data.value = newRoom.value;
     }
 
