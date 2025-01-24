@@ -26,7 +26,8 @@ const clickedButtons = new Set<string>();
 const searchName = ref<string>('hostName')
 const seachContent = ref('')
 const inputNotify = ref('')
-
+const isSkinVisible = ref(false);
+const imageSkinUrl = ref('');
 const dialogStyle = (): string => {
     return window.innerWidth > 600 ? '600px' : '90%'
 }
@@ -305,6 +306,11 @@ const handleNotifyBtn = (): void => {
     }
 }
 
+const shwoSkin = (xuid: string): void => {
+    imageSkinUrl.value = `https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/${xuid}/image/avatar`;
+    isSkinVisible.value = true;
+}
+
 </script>
 
 <template>
@@ -369,7 +375,9 @@ const handleNotifyBtn = (): void => {
                                 </div>
                             </template>
                             <template #default>
-                                <p>{{ $t('room.hostName') }}{{ d.customProperties.hostName }}</p>
+                                <p @click="shwoSkin(d.customProperties.ownerId)">{{
+                                        $t('room.hostName')
+                                    }}{{ d.customProperties.hostName }}</p>
                                 <p>{{ $t('room.MemberCount') }}{{ d.customProperties.MemberCount }}/{{
                                         d.customProperties.MaxMemberCount
                                     }}</p>
@@ -525,6 +533,14 @@ const handleNotifyBtn = (): void => {
             </div>
         </template>
     </el-dialog>
+
+
+    <el-image-viewer
+        v-if="isSkinVisible"
+        :initial-index="0"
+        :url-list="[imageSkinUrl]"
+        @close="isSkinVisible = false"
+    />
 </template>
 
 <style scoped>
