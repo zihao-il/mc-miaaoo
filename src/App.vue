@@ -24,7 +24,7 @@ let dialogFormVisible = ref<boolean>(false);
 let dialogNotifyVisible = ref<boolean>(false);
 const clickedButtons = new Set<string>();
 const searchName = ref<string>('hostName')
-const seachContent = ref<string>('')
+const searchContent = ref<string>('')
 const inputNotify = ref<string>('')
 const isSkinVisible = ref(false);
 const imageSkinUrl = ref<string>('');
@@ -275,11 +275,11 @@ const searchBtn = (): void => {
     room_data.value = newRoom.value;
     if (searchName.value === 'hostName') {
         room_data.value = room_data.value.filter((room: any) => {
-            return room.customProperties.worldName.includes(seachContent.value);
+            return room.customProperties.worldName.includes(searchContent.value);
         });
     } else {
         room_data.value = room_data.value.filter((room: any) => {
-            return room.customProperties.hostName.includes(seachContent.value);
+            return room.customProperties.hostName.includes(seacrhContent.value);
         });
 
     }
@@ -290,7 +290,7 @@ const clearBtn = (): void => {
 
 }
 const inputBtn = (): void => {
-    if (seachContent.value === '') {
+    if (seachrContent.value === '') {
         room_data.value = newRoom.value;
     }
 
@@ -321,7 +321,7 @@ const shwoSkin = (xuid: string): void => {
                     <el-col><h2 class="title">{{ $t('locale.title') }}</h2></el-col>
                     <el-col :span="21" class="input-with-select">
                         <el-input
-                            v-model="seachContent"
+                            v-model="searchContent"
                             :placeholder="$t('search.placeholder')"
                             clearable
                             style="min-width: auto"
