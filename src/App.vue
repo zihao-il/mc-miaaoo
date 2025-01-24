@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {mc_list, mc_join} from "./utils/axios";
 import {ref, onMounted, h} from "vue";
-import {RefreshRight, Sunny, Moon, Setting, Search} from '@element-plus/icons-vue';
+import {RefreshRight, Sunny, Moon, Setting, Search, Picture as IconPicture} from '@element-plus/icons-vue';
 import {ElLoading, ElNotification} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
 import 'element-plus/es/components/notification/style/css'
@@ -24,10 +24,10 @@ let dialogFormVisible = ref<boolean>(false);
 let dialogNotifyVisible = ref<boolean>(false);
 const clickedButtons = new Set<string>();
 const searchName = ref<string>('hostName')
-const seachContent = ref('')
-const inputNotify = ref('')
+const seachContent = ref<string>('')
+const inputNotify = ref<string>('')
 const isSkinVisible = ref(false);
-const imageSkinUrl = ref('');
+const imageSkinUrl = ref<string>('');
 const dialogStyle = (): string => {
     return window.innerWidth > 600 ? '600px' : '90%'
 }
@@ -534,12 +534,12 @@ const shwoSkin = (xuid: string): void => {
         </template>
     </el-dialog>
 
-
     <el-image-viewer
         v-if="isSkinVisible"
         :initial-index="0"
         :url-list="[imageSkinUrl]"
         @close="isSkinVisible = false"
+
     />
 </template>
 
