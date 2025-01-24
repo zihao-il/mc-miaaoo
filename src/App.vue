@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {mc_list, mc_join} from "./utils/axios";
 import {ref, onMounted, h} from "vue";
-import {RefreshRight, Sunny, Moon, Setting, Search, Picture as IconPicture} from '@element-plus/icons-vue';
+import {RefreshRight, Sunny, Moon, Setting, Search} from '@element-plus/icons-vue';
 import {ElLoading, ElNotification} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
 import 'element-plus/es/components/notification/style/css'
@@ -536,6 +536,7 @@ const shwoSkin = (xuid: string): void => {
 
     <el-image-viewer
         v-if="isSkinVisible"
+        :hide-on-click-modal="true"
         :initial-index="0"
         :url-list="[imageSkinUrl]"
         @close="isSkinVisible = false"
