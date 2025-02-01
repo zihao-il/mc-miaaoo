@@ -25,6 +25,8 @@
   "setting.zhHant": "繁體中文",
   "setting.en": "English",
   "setting.enter": "确定",
+  "setting.other": "其他设置",
+  "setting.hideSkin": "右上角显示皮肤",
   "locale.loading": "加载中...",
   "mode.survival": "生存模式",
   "mode.hardcore": "极限模式",

@@ -25,6 +25,8 @@
   "setting.zhHant": "繁體中文",
   "setting.en": "English",
   "setting.enter": "Confirm",
+  "setting.other": "Other settings",
+  "setting.hideSkin": "Show skin in the top right corner",
   "locale.loading": "Loading...",
   "mode.survival": "Survival Mode",
   "mode.hardcore": "Hardcore Mode",

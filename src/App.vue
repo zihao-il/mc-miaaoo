@@ -19,6 +19,7 @@ let room_data = ref<any[]>([]);
 let room_count = ref<number>(0);
 let newRoom = ref<any[]>([]);
 let isNull = ref<string>("hide");
+let progressHide = ref<string>("");
 const isDisabled = ref<boolean>(false);
 let dialogFormVisible = ref<boolean>(false);
 let dialogNotifyVisible = ref<boolean>(false);
@@ -318,10 +319,25 @@ const handleNotifyBtn = (): void => {
     }
 }
 
-const shwoSkin = (xuid: string): void => {
+const showSkin = (xuid: string, type: string = 'btn'): void => {
+    if (type === 'avatar' && store.ShowSkin.length === 0) {
+        return
+    }
     imageSkinUrl.value = `https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/${xuid}/image/avatar`;
     isSkinVisible.value = true;
 }
+
+const showAvatar = (xuid: string): string => {
+    if (store.ShowSkin.length === 0) {
+        progressHide.value = "hide"
+        return '';
+    } else {
+        return `https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/${xuid}/image/avatar`;
+
+    }
+
+}
+
 
 </script>
 
@@ -384,12 +400,13 @@ const shwoSkin = (xuid: string): void => {
 
                                     <span class="gamerName"
                                           v-html="parseMinecraftColors(d.customProperties.worldName)"></span>
+
                                 </div>
                             </template>
                             <template #default>
-                                <p @click="shwoSkin(d.customProperties.ownerId)">{{
+                                <p @click="showSkin(d.customProperties.ownerId)">{{
                                         $t('room.hostName')
-                                    }}{{ d.customProperties.hostName }}</p>
+                                    }}{{ d.customProperties.hostName }} </p>
                                 <p>{{ $t('room.MemberCount') }}{{ d.customProperties.MemberCount }}/{{
                                         d.customProperties.MaxMemberCount
                                     }}</p>
@@ -397,6 +414,20 @@ const shwoSkin = (xuid: string): void => {
                                         gameMode(d.customProperties.worldType, d.customProperties.isHardcore)
                                     }}</p>
                                 <p>{{ $t('room.createTime') }}{{ changeTime(d.createTime) }}</p>
+
+                                <el-progress
+                                    :class="progressHide"
+                                    :percentage=" d.customProperties.MemberCount/d.customProperties.MaxMemberCount*100"
+                                    type="circle"
+                                    @click="showSkin(d.customProperties.ownerId,'avatar')">
+                                    <template #default>
+
+                                        <el-avatar :size="100"
+                                                   :src="showAvatar(d.customProperties.ownerId)"
+                                        />
+                                    </template>
+
+                                </el-progress>
                             </template>
                             <template #footer>
                                 <el-tag type="primary">{{ d.customProperties.version }}</el-tag>
@@ -498,6 +529,15 @@ const shwoSkin = (xuid: string): void => {
                         {{ $t('setting.en') }}
                     </el-radio>
                 </el-radio-group>
+            </el-col>
+
+            <el-col :span="24" class="setText">
+                <el-text size="large">{{ $t('setting.other') }}</el-text>
+            </el-col>
+            <el-col :span="24">
+                <el-checkbox-group v-model="store.ShowSkin">
+                    <el-checkbox :label="$t('setting.hideSkin')" :value="true"/>
+                </el-checkbox-group>
             </el-col>
         </el-row>
 
@@ -686,6 +726,21 @@ const shwoSkin = (xuid: string): void => {
 
 .notify-text {
     margin-bottom: 0.75em;
+
+}
+
+.el-card {
+    position: relative;
+}
+
+.el-progress {
+    position: absolute;
+    top: 0.25em;
+    right: 0.25em;
+}
+
+.el-avatar {
+    --el-avatar-bg-color: none;
 
 }
 </style>
