@@ -45,18 +45,30 @@ const getRoomData = async (): Promise<void> => {
     })
 
     let sources = store.ShowRoom
-    const {data} = await mc_list();
 
-    room_data.value = data.results;
-    if (sources.find((source) => source.id === 0)) {
-        room_data.value = room_data.value.filter((room: any) => {
-            return !(room.customProperties.MemberCount >= room.customProperties.MaxMemberCount || room.customProperties.BroadcastSetting !== 3);
+    try {
+        const {data} = await mc_list();
+        room_data.value = data.results;
+        if (sources.find((source) => source.id === 0)) {
+            room_data.value = room_data.value.filter((room: any) => {
+                return !(room.customProperties.MemberCount >= room.customProperties.MaxMemberCount || room.customProperties.BroadcastSetting !== 3);
+            });
+        }
+        newRoom.value = room_data.value
+        room_count.value = room_data.value.length;
+        isNull.value = room_data.value.length === 0 ? "" : "hide";
+    } catch (e) {
+        ElNotification({
+            title: t('locale.error'),
+            message: t('locale.errorMessage'),
+            type: 'error',
+            zIndex: 9999
         });
+    } finally {
+        loading.close()
+
     }
-    newRoom.value = room_data.value
-    room_count.value = room_data.value.length;
-    isNull.value = room_data.value.length === 0 ? "" : "hide";
-    loading.close()
+
 
 };
 

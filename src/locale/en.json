@@ -40,6 +40,8 @@
   "locale.JoinsMessage": "Jump into the game and check it out!",
   "locale.JoinsError": "Join Failed!",
   "locale.JoinsErrorMessage": "Try refreshing and joining again!",
+  "locale.error": "Loading failed!",
+  "locale.errorMessage": "Failed to fetch the list!",
   "locale.mcStart": "Start MC!",
   "button.full": "Room Full",
   "button.limit": "Join Restricted",
