@@ -514,6 +514,14 @@ const showAvatar = (xuid: string): string => {
                 </el-radio-group>
             </el-col>
             <el-col :span="24" class="setText">
+                <el-text size="large">{{ $t('setting.other') }}</el-text>
+            </el-col>
+            <el-col :span="24">
+                <el-checkbox-group v-model="store.ShowSkin">
+                    <el-checkbox :label="$t('setting.hideSkin')" :value="true"/>
+                </el-checkbox-group>
+            </el-col>
+            <el-col :span="24" class="setText">
                 <el-text size="large">{{ $t('setting.language') }}</el-text>
             </el-col>
             <el-col :span="24">
@@ -531,14 +539,6 @@ const showAvatar = (xuid: string): string => {
                 </el-radio-group>
             </el-col>
 
-            <el-col :span="24" class="setText">
-                <el-text size="large">{{ $t('setting.other') }}</el-text>
-            </el-col>
-            <el-col :span="24">
-                <el-checkbox-group v-model="store.ShowSkin">
-                    <el-checkbox :label="$t('setting.hideSkin')" :value="true"/>
-                </el-checkbox-group>
-            </el-col>
         </el-row>
 
         <template #footer>
