@@ -465,6 +465,9 @@ const shwoSkin = (xuid: string): void => {
                     <el-radio :value="JSON.stringify({ id: 3, name: 'gouhope' })" size="large">
                         {{ $t('setting.joinUser2') }}
                     </el-radio>
+                    <el-radio :value="JSON.stringify({ id: 4, name: 'HelloMC25' })" size="large">
+                        {{ $t('setting.joinUser3') }}
+                    </el-radio>
                 </el-radio-group>
             </el-col>
             <el-col :span="24" class="setText">

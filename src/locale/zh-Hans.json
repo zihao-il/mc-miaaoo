@@ -17,8 +17,9 @@
   "setting.display": "显示设置",
   "setting.notJoin": "隐藏不可加入的多人游戏",
   "setting.joinSetting": "加入设置（已加谁为好友）",
-  "setting.joinUser1": "MultiMC23（好友已满，不要再加了）",
-  "setting.joinUser2": "gouhope（新用户选这个）",
+  "setting.joinUser1": "MultiMC23（好友已满）",
+  "setting.joinUser2": "gouhope（好友已满）",
+  "setting.joinUser3": "HelloMC25（新用户选这个）",
   "setting.language": "语言设置",
   "setting.zhHans": "简体中文",
   "setting.zhHant": "繁體中文",
@@ -47,5 +48,5 @@
   "notify.placeholder": "请确认您已阅读以上内容",
   "notify.text1": "请输入“我已閱讀”或“我已阅读”或“I have read”以继续访问：",
   "notify.text2": "使用方法：",
-  "notify.text3": "先在 Minecraft 中添加好友“gouhope”，然后停留在“好友”标签页（即显示“可加入的 Realms”和“可加入的好友”的页面），返回网页，点击右下角的设置按钮，选择“gouhope”，然后选择房间。点击后，请查看网页底部显示操作是否成功。如果成功，请返回游戏查看是否显示房间。"
+  "notify.text3": "先在 Minecraft 中添加好友“HelloMC25”，然后停留在“好友”标签页（即显示“可加入的 Realms”和“可加入的好友”的页面），返回网页，点击右下角的设置按钮，选择“HelloMC25”，然后选择房间。点击后，请查看网页底部显示操作是否成功。如果成功，请返回游戏查看是否显示房间。"
 }
