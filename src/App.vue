@@ -407,8 +407,9 @@ const showAvatar = (xuid: string): string => {
                                 <p @click="showSkin(d.customProperties.ownerId)">{{
                                         $t('room.hostName')
                                     }}
-                                    <el-image :src="'https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/'+''+d.customProperties.ownerId+'/image/head'"
-                                              style="width: 1em; display: inline-block;"/>
+                                    <el-image
+                                        :src="'https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/'+''+d.customProperties.ownerId+'/image/head'"
+                                        style="width: 1em;"/>
                                     {{ d.customProperties.hostName }}
                                 </p>
                                 <p>{{ $t('room.MemberCount') }}{{ d.customProperties.MemberCount }}/{{
@@ -746,5 +747,9 @@ const showAvatar = (xuid: string): string => {
 .el-avatar {
     --el-avatar-bg-color: none;
 
+}
+
+.el-image {
+    overflow: visible;
 }
 </style>
