@@ -1,6 +1,6 @@
 {
   "locale.language": "English",
-  "locale.title": "Minecraft Bedrock Edition Online Multiplayer List",
+  "locale.title": "Minecraft Bedrock Multiplayer Platform",
   "search.placeholder": "Enter search content",
   "search.hostName": "Room Name",
   "search.userName": "Username",
@@ -20,6 +20,7 @@
   "setting.joinUser1": "MultiMC23 (Friend list is full)",
   "setting.joinUser2": "gouhope (Friend list is full)",
   "setting.joinUser3": "HelloMC25 (New users select this)",
+  "setting.inputXuid": "Please enter your XUID",
   "setting.language": "Language Settings",
   "setting.zhHans": "简体中文",
   "setting.zhHant": "繁體中文",

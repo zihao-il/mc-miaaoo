@@ -1,6 +1,6 @@
 {
   "locale.language": "簡體中文",
-  "locale.title": "Minecraft基岩版線上多人遊戲列表",
+  "locale.title": "Minecraft 基岩版聯機平台",
   "search.placeholder": "輸入搜尋內容",
   "search.hostName": "房間名稱",
   "search.userName": "使用者名稱",
@@ -20,6 +20,7 @@
   "setting.joinUser1": "MultiMC23（好友已滿）",
   "setting.joinUser2": "gouhope（好友已滿）",
   "setting.joinUser3": "HelloMC25（新使用者選這個）",
+  "setting.inputXuid": "請輸入自己的XUID",
   "setting.language": "語言設定",
   "setting.zhHans": "简体中文",
   "setting.zhHant": "繁體中文",

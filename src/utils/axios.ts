@@ -17,7 +17,7 @@ export const mc_list = (): Promise<any> => {
     })
 }
 
-export const mc_join = (roomFrom: string, addId: number, roomId: string, sessionName: string): Promise<any> => {
+export const mc_join = (roomFrom: string, addId: number, roomId: string, sessionName: string, userXuid: string): Promise<any> => {
     return request({
         url: '/join',
         method: 'post',
@@ -25,7 +25,8 @@ export const mc_join = (roomFrom: string, addId: number, roomId: string, session
             roomfrom: roomFrom,
             addid: addId,
             roomid: roomId,
-            sessionname: sessionName
+            sessionname: sessionName,
+            userxuid: userXuid
         }
     })
 }

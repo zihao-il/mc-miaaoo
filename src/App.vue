@@ -222,7 +222,7 @@ const wsJoin = async (roomFrom: string, id: string, name: string): Promise<void>
     const Friends = JSON.parse(store.Friends)
     const setId = Friends.id
     try {
-        await mc_join(roomFrom, setId, id, name);
+        await mc_join(roomFrom, setId, id, name, store.Xuid);
     } catch (e) {
         ElNotification({
             title: t('locale.JoinsError'),
@@ -338,6 +338,11 @@ const showAvatar = (xuid: string): string => {
 
 }
 
+const validateXuid = (): void => {
+    if (store.Xuid.length !== 16) {
+        store.Xuid = "";
+    }
+};
 
 </script>
 
@@ -517,6 +522,17 @@ const showAvatar = (xuid: string): string => {
                         {{ $t('setting.joinUser3') }}
                     </el-radio>
                 </el-radio-group>
+                <el-input
+                    v-model="store.Xuid"
+                    :placeholder="$t('setting.inputXuid')"
+                    maxlength="16"
+                    show-word-limit
+                    type="text"
+                    @blur="validateXuid"
+                    @input="store.Xuid = store.Xuid.replace(/\D/g, '')"
+                >
+                    <template #prepend>XUID</template>
+                </el-input>
             </el-col>
             <el-col :span="24" class="setText">
                 <el-text size="large">{{ $t('setting.other') }}</el-text>

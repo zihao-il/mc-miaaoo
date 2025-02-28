@@ -7,6 +7,7 @@ export const useMCOnlineStore = defineStore('MCOnline', {
         Language: "zhHans",
         Notify: true,
         ShowSkin: [],
+        Xuid: "",
     }),
     actions: {},
     persist: {
