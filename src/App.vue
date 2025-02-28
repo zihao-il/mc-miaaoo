@@ -496,7 +496,7 @@ const validateXuid = (): void => {
     </el-affix>
     <el-backtop :bottom="80" :right="80"/>
     <el-dialog v-model="dialogFormVisible" :title="$t('setting.title')" :width="dialogStyle()"
-               height="300">
+               :z-index="99999" height="300">
         <el-row>
             <el-col :span="24" class="setText">
                 <el-text size="large">{{ $t('setting.display') }}</el-text>
@@ -768,4 +768,6 @@ const validateXuid = (): void => {
 .el-image {
     overflow: visible;
 }
+
+
 </style>
