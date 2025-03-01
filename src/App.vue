@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {mc_list, mc_join} from "./utils/axios";
+import {mc_list, mc_join, mc_xuid} from "./utils/axios";
 import {ref, onMounted, h} from "vue";
 import {RefreshRight, Sunny, Moon, Setting, Search} from '@element-plus/icons-vue';
 import {ElLoading, ElNotification} from "element-plus";
@@ -29,6 +29,7 @@ const searchContent = ref<string>('')
 const inputNotify = ref<string>('')
 const isSkinVisible = ref(false);
 const imageSkinUrl = ref<string>('');
+const gamerTag = ref<string>('');
 const dialogStyle = (): string => {
     return window.innerWidth > 600 ? '600px' : '90%'
 }
@@ -344,6 +345,29 @@ const validateXuid = (): void => {
     }
 };
 
+const getXuid = async (xuid: string): Promise<void> => {
+    try {
+        const {data} = await mc_xuid(xuid);
+        store.Xuid = data
+        ElNotification({
+            title: t('setting.xuidSuccess'),
+            message: t('setting.xuidSuccessMessage'),
+            type: 'error',
+            zIndex: 99999
+        });
+    } catch (e) {
+        ElNotification({
+            title: t('setting.xuidError'),
+            message: t('setting.xuiderrorMessage'),
+            type: 'error',
+            zIndex: 99999
+        });
+        store.Xuid = ""
+    }
+
+
+}
+
 </script>
 
 <template>
@@ -505,6 +529,9 @@ const validateXuid = (): void => {
                 <el-checkbox-group v-model="store.ShowRoom">
                     <el-checkbox :label="$t('setting.notJoin')" :value="{ id: 0, name: 'unavailable' }"/>
                 </el-checkbox-group>
+                <el-checkbox-group v-model="store.ShowSkin">
+                    <el-checkbox :label="$t('setting.hideSkin')" :value="true"/>
+                </el-checkbox-group>
             </el-col>
             <el-col :span="24" class="setText">
                 <el-text size="large">{{ $t('setting.joinSetting') }}</el-text>
@@ -522,6 +549,24 @@ const validateXuid = (): void => {
                         {{ $t('setting.joinUser3') }}
                     </el-radio>
                 </el-radio-group>
+
+            </el-col>
+            <el-col :span="24" class="setText">
+                <el-text size="large">{{ $t('setting.join') }}</el-text>
+            </el-col>
+            <el-col :span="24">
+                <el-input
+                    v-model="gamerTag"
+                    :placeholder="$t('setting.inputGamerTag')"
+                    style="margin-bottom: 1em"
+                    type="text"
+                    @input="gamerTag = gamerTag.replace(/[^A-Za-z0-9# ]/g, '')"
+                >
+                    <template #append>
+                        <el-button type="primary" @click="getXuid(gamerTag)">{{ $t('setting.getXuid') }}</el-button>
+                    </template>
+                    <template #prepend>{{ $t('setting.gamerTag') }}</template>
+                </el-input>
                 <el-input
                     v-model="store.Xuid"
                     :placeholder="$t('setting.inputXuid')"
@@ -533,14 +578,6 @@ const validateXuid = (): void => {
                 >
                     <template #prepend>XUID</template>
                 </el-input>
-            </el-col>
-            <el-col :span="24" class="setText">
-                <el-text size="large">{{ $t('setting.other') }}</el-text>
-            </el-col>
-            <el-col :span="24">
-                <el-checkbox-group v-model="store.ShowSkin">
-                    <el-checkbox :label="$t('setting.hideSkin')" :value="true"/>
-                </el-checkbox-group>
             </el-col>
             <el-col :span="24" class="setText">
                 <el-text size="large">{{ $t('setting.language') }}</el-text>

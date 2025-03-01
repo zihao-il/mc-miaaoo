@@ -30,3 +30,13 @@ export const mc_join = (roomFrom: string, addId: number, roomId: string, session
         }
     })
 }
+export const mc_xuid = (Xuid: string): Promise<any> => {
+    return request({
+        url: '/getxuid',
+        method: 'get',
+        params: {
+            gametag: Xuid,
+
+        }
+    })
+}
