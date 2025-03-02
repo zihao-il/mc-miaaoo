@@ -1,0 +1,37 @@
+name: build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies with Yarn
+      run: |
+        yarn install --frozen-lockfile
+
+    - name: Build
+      run: |
+        yarn build
+        
+    - name: Package and upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-actions
+        path: "./dist"
