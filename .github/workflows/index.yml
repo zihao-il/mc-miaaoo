@@ -30,3 +30,9 @@ jobs:
     - name: Build
       run: |
         yarn build
+        
+    - name: Package and upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-actions
+        path: "./dist"
