@@ -348,11 +348,11 @@ const validateXuid = (): void => {
 const getXuid = async (xuid: string): Promise<void> => {
     try {
         const {data} = await mc_xuid(xuid);
-        store.Xuid = data
+        store.Xuid = String(data)
         ElNotification({
             title: t('setting.xuidSuccess'),
             message: t('setting.xuidSuccessMessage'),
-            type: 'error',
+            type: 'success',
             zIndex: 99999
         });
     } catch (e) {
@@ -362,7 +362,6 @@ const getXuid = async (xuid: string): Promise<void> => {
             type: 'error',
             zIndex: 99999
         });
-        store.Xuid = ""
     }
 
 
@@ -451,7 +450,7 @@ const getXuid = async (xuid: string): Promise<void> => {
 
                                 <el-progress
                                     :class="progressHide"
-                                    :percentage=" d.customProperties.MemberCount/d.customProperties.MaxMemberCount*100"
+                                    :percentage="d.customProperties.MemberCount / d.customProperties.MaxMemberCount * 100"
                                     type="circle"
                                     @click="showSkin(d.customProperties.ownerId,'avatar')">
                                     <template #default>
