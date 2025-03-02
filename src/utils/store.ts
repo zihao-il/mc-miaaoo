@@ -5,7 +5,7 @@ export const useMCOnlineStore = defineStore('MCOnline', {
         Friends: "{\"id\":4,\"name\":\"HelloMC25\"}",
         ShowRoom: [{id: 0, name: "unavailable"}],
         Language: "zhHans",
-        Notify: true,
+        Notify: false,
         ShowSkin: [],
         Xuid: "",
     }),
