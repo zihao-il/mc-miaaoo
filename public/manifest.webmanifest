@@ -1,8 +1,8 @@
 {
-  "name": "Minecraft基岩版線上多人遊戲列表",
-  "short_name": "Minecraft基岩版線上多人遊戲列表",
+  "name": "Minecraft基岩版联机大厅",
+  "short_name": "Minecraft基岩版联机大厅",
   "start_url": ".",
-  "description": "Minecraft基岩版線上多人遊戲列表",
+  "description": "Minecraft基岩版联机大厅",
   "display": "standalone",
   "orientation": "portrait-primary",
   "prefer_related_applications": false,
