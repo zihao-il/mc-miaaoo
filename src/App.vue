@@ -5,6 +5,7 @@ import {RefreshRight, Sunny, Moon, Setting, Search} from '@element-plus/icons-vu
 import {ElLoading, ElNotification, ElMessage} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
 import 'element-plus/es/components/notification/style/css'
+import 'element-plus/es/components/message/style/css'
 
 
 import {isDark, toggleDark} from './utils/dark';
@@ -370,10 +371,16 @@ const getXuid = async (xuid: string): Promise<void> => {
 const copyText = async (text: string) => {
     try {
         await navigator.clipboard.writeText(text)
-        ElMessage.success(t('locale.copy'))
-    } catch (e) {
-        ElMessage.error(t('locale.copyError'))
+        ElMessage({
+            message: t('locale.copy'),
+            type: 'success',
+        })
 
+    } catch (e) {
+        ElMessage({
+            message: t('locale.copyError'),
+            type: 'success',
+        })
     }
 }
 
