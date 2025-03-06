@@ -53,6 +53,8 @@
   "locale.error": "加载失败！",
   "locale.errorMessage": "获取列表失败！",
   "locale.mcStart": "啟動 MC！",
+  "locale.copy": "複製房主名成功！",
+  "locale.copyError": "複製房主名失敗！",
   "button.full": "人數已滿",
   "button.limit": "限制加入",
   "button.show": "顯示房間",

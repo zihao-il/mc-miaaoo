@@ -53,6 +53,8 @@
   "locale.error": "Loading failed!",
   "locale.errorMessage": "Failed to fetch the list!",
   "locale.mcStart": "Start MC!",
+  "locale.copy": "Copied homeowner name successfully!",
+  "locale.copyError": "Failed to copy homeowner name!",
   "button.full": "Room Full",
   "button.limit": "Join Restricted",
   "button.show": "Show Room",

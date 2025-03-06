@@ -2,7 +2,7 @@
 import {mc_list, mc_join, mc_xuid} from "./utils/axios";
 import {ref, onMounted, h} from "vue";
 import {RefreshRight, Sunny, Moon, Setting, Search} from '@element-plus/icons-vue';
-import {ElLoading, ElNotification} from "element-plus";
+import {ElLoading, ElNotification, ElMessage} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
 import 'element-plus/es/components/notification/style/css'
 
@@ -367,6 +367,17 @@ const getXuid = async (xuid: string): Promise<void> => {
 
 }
 
+const copyText = async (text: string) => {
+    try {
+        await navigator.clipboard.writeText(text)
+        ElMessage.success(t('locale.copy'))
+    } catch (e) {
+        ElMessage.error(t('locale.copyError'))
+
+    }
+}
+
+
 </script>
 
 <template>
@@ -432,13 +443,15 @@ const getXuid = async (xuid: string): Promise<void> => {
                                 </div>
                             </template>
                             <template #default>
-                                <p @click="showSkin(d.customProperties.ownerId)">{{
+                                <p>{{
                                         $t('room.hostName')
                                     }}
                                     <el-image
                                         :src="'https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/'+''+d.customProperties.ownerId+'/image/head'"
-                                        style="width: 1em;"/>
-                                    {{ d.customProperties.hostName }}
+                                        style="width: 1em;" @click="showSkin(d.customProperties.ownerId)"/>
+                                    <span style="margin-left: 0.5em" @click="copyText(d.customProperties.hostName)">{{
+                                            d.customProperties.hostName
+                                        }}</span>
                                 </p>
                                 <p>{{ $t('room.MemberCount') }}{{ d.customProperties.MemberCount }}/{{
                                         d.customProperties.MaxMemberCount
