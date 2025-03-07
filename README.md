@@ -1,5 +1,7 @@
 # mc-miaaoo
 
-### 原站：[mc.miaaoo.com](https://mc.miaaoo.com)
 
-### 本站：[miaaoo.pages.dev](https://miaaoo.pages.dev)
+### 本站：[lianji.miaaoo.com](https://lianji.miaaoo.com)
+### 备用：[miaaoo.pages.dev](https://miaaoo.pages.dev)
+
+### 原站：[mc.miaaoo.com](https://mc.miaaoo.com)
