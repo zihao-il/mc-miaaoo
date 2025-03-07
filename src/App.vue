@@ -539,26 +539,31 @@ const changeTour = (current: number): void => {
                         如果你是老用户可以点击右上角的X来关闭这个引导
                     </template>
                 </el-tour-step>
-                <el-tour-step :target="refSettingBtn?.$el" placement="top" title="第一步">
+                <el-tour-step :target="refSettingBtn?.$el" placement="top" title="加入房间第一步">
                     <template #default>
                         首先点击下面的设置按钮
                     </template>
                 </el-tour-step>
-                <el-tour-step :target="refJoinSetting?.$el" placement="top" title="第二步">
+                <el-tour-step :target="refJoinSetting?.$el" placement="top" title="加入房间第二步">
                     <template #default>
                         <el-link href="minecraft://" type="primary">打开Minecraft</el-link>
                         后添加下面推荐名称的好友即可
                     </template>
                 </el-tour-step>
-                <el-tour-step :target="refXuidSetting?.$el" placement="top" title="第三步">
+                <el-tour-step :target="refXuidSetting?.$el" placement="top" title="加入房间第三步">
                     <template #default>
                         如果你是Ore UI用户请在下面你的用户名然后点击生成XUID，等下方自动填充后即可。
                     </template>
                 </el-tour-step>
-                <el-tour-step placement="top" title="最后一步">
+                <el-tour-step placement="top" title="加入房间最后一步">
                     <template #default>
                         最后在下方选择自己喜欢的房间点击显示房间即可，等待显示加入成功后在游戏好友页面会显示房间列表，Ore
                         UI用户则会在游戏上方显示邀请加入房间的弹窗点击加入即可。
+                    </template>
+                </el-tour-step>
+                <el-tour-step placement="top" title="展示房间">
+                    <template #default>
+                        如果你需要在此网站中显示你的房间你需要完成“加入房间第二步”后在地图设置中的多人游戏中选择好友的好友后进入地图即可。
                     </template>
                 </el-tour-step>
 
