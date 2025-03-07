@@ -6,6 +6,8 @@ import {ElLoading, ElNotification, ElMessage} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
 import 'element-plus/es/components/notification/style/css'
 import 'element-plus/es/components/message/style/css'
+import type {ButtonInstance} from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
 
 import {isDark, toggleDark} from './utils/dark';
@@ -31,6 +33,9 @@ const inputNotify = ref<string>('')
 const isSkinVisible = ref(false);
 const imageSkinUrl = ref<string>('');
 const gamerTag = ref<string>('');
+const refSettingBtn = ref<ButtonInstance>();
+const refJoinSetting = ref<ButtonInstance>();
+const refXuidSetting = ref<ButtonInstance>();
 const dialogStyle = (): string => {
     return window.innerWidth > 600 ? '600px' : '90%'
 }
@@ -384,11 +389,22 @@ const copyText = async (text: string) => {
     }
 }
 
+const changeTour = (current: number): void => {
+    console.log(current)
+    if (current === 2 || current === 3) {
+        dialogFormVisible.value = true
+    } else {
+        dialogFormVisible.value = false
+
+    }
+
+}
 
 </script>
 
 <template>
     <div class="common-layout">
+
         <el-container>
             <el-header>
                 <el-row class="header-container" justify="center">
@@ -512,9 +528,44 @@ const copyText = async (text: string) => {
             </el-footer>
         </el-container>
 
+        <el-config-provider :locale="zhCn">
+            <el-tour v-model="store.Tour" :z-index="100000" @change="changeTour" @close="store.Tour = false">
+                <el-tour-step title="欢迎来到这个网站">
+                    <template #default>
+                        我将为你讲解网页使用说明，当然你也可以去B站观看
+                        <el-link href="" target="_blank" type="primary">视频教程</el-link>
+                        (还没做)
+                        。
+                        如果你是老用户可以点击右上角的X来关闭这个引导
+                    </template>
+                </el-tour-step>
+                <el-tour-step :target="refSettingBtn?.$el" placement="top" title="第一步">
+                    <template #default>
+                        首先点击下面的设置按钮
+                    </template>
+                </el-tour-step>
+                <el-tour-step :target="refJoinSetting?.$el" placement="top" title="第二步">
+                    <template #default>
+                        <el-link href="minecraft://" type="primary">打开Minecraft</el-link>
+                        后添加下面推荐名称的好友即可
+                    </template>
+                </el-tour-step>
+                <el-tour-step :target="refXuidSetting?.$el" placement="top" title="第三步">
+                    <template #default>
+                        如果你是Ore UI用户请在下面你的用户名然后点击生成XUID，等下方自动填充后即可。
+                    </template>
+                </el-tour-step>
+                <el-tour-step placement="top" title="最后一步">
+                    <template #default>
+                        最后在下方选择自己喜欢的房间点击显示房间即可，等待显示加入成功后在游戏好友页面会显示房间列表，Ore
+                        UI用户则会在游戏上方显示邀请加入房间的弹窗点击加入即可。
+                    </template>
+                </el-tour-step>
 
+            </el-tour>
+        </el-config-provider>
     </div>
-    <el-affix :offset="20" class="set-right-bottom" position="bottom">
+    <el-affix ref="refSettingBtn" :offset="20" class="set-right-bottom" position="bottom">
         <el-button :icon="Setting" circle size="large" type="primary" @click="dialogFormVisible=true"></el-button>
 
     </el-affix>
@@ -555,7 +606,7 @@ const copyText = async (text: string) => {
             <el-col :span="24" class="setText">
                 <el-text size="large">{{ $t('setting.joinSetting') }}</el-text>
             </el-col>
-            <el-col :span="24">
+            <el-col ref="refJoinSetting" :span="24">
                 <el-radio-group v-model="store.Friends">
 
                     <el-radio :value="JSON.stringify({ id: 2, name: 'MultiMC23' })" size="large">
@@ -573,7 +624,7 @@ const copyText = async (text: string) => {
             <el-col :span="24" class="setText">
                 <el-text size="large">{{ $t('setting.join') }}</el-text>
             </el-col>
-            <el-col :span="24">
+            <el-col ref="refXuidSetting" :span="24">
                 <el-input
                     v-model="gamerTag"
                     :placeholder="$t('setting.inputGamerTag')"
@@ -674,6 +725,7 @@ const copyText = async (text: string) => {
         @close="isSkinVisible = false"
 
     />
+
 </template>
 
 <style scoped>

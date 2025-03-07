@@ -8,6 +8,7 @@ export const useMCOnlineStore = defineStore('MCOnline', {
         Notify: false,
         ShowSkin: [],
         Xuid: "",
+        Tour: true
     }),
     actions: {},
     persist: {
