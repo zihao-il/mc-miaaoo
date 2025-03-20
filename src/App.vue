@@ -623,6 +623,9 @@ const changeTour = (current: number): void => {
                     <el-radio :value="JSON.stringify({ id: 4, name: 'HelloMC25' })" size="large">
                         {{ $t('setting.joinUser3') }}
                     </el-radio>
+                    <el-radio :value="JSON.stringify({ id: 5, name: 'HelloMC25a' })" size="large">
+                        {{ $t('setting.joinUser4') }}
+                    </el-radio>
                 </el-radio-group>
 
             </el-col>
