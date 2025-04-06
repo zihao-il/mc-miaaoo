@@ -519,10 +519,10 @@ const changeTour = (current: number): void => {
             <el-footer>
                 <div class="footer">
 
-<!--                    {{ $t('locale.link') }}-->
-<!--                    <el-link href="https://mcxbox.pages.dev/"-->
-<!--                             type="primary">MC房间查看-->
-<!--                    </el-link>-->
+                    {{ $t('locale.link') }}
+                    <el-link href="https://t.me/MCBE_Group"
+                             type="primary">TG MC版本推送频道
+                    </el-link>
 
                 </div>
             </el-footer>
