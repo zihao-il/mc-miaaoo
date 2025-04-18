@@ -39,5 +39,6 @@ declare module 'vue' {
     ElText: typeof import('element-plus/es')['ElText']
     ElTour: typeof import('element-plus/es')['ElTour']
     ElTourStep: typeof import('element-plus/es')['ElTourStep']
+    ElWatermark: typeof import('element-plus/es')['ElWatermark']
   }
 }

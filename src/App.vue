@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {mc_list, mc_join, mc_xuid} from "./utils/axios";
-import {ref, onMounted, h} from "vue";
+import {ref, onMounted, h, reactive, watch} from "vue";
 import {RefreshRight, Sunny, Moon, Setting, Search} from '@element-plus/icons-vue';
 import {ElLoading, ElNotification, ElMessage} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
@@ -390,7 +390,6 @@ const copyText = async (text: string) => {
 }
 
 const changeTour = (current: number): void => {
-    console.log(current)
     if (current === 2 || current === 3) {
         dialogFormVisible.value = true
     } else {
@@ -399,134 +398,152 @@ const changeTour = (current: number): void => {
     }
 
 }
+const font = reactive({
+    color: 'rgba(0, 0, 0, .15)',
+})
+
+watch(
+    isDark,
+    () => {
+        font.color = isDark.value
+            ? 'rgba(255, 255, 255, .15)'
+            : 'rgba(0, 0, 0, .15)'
+    },
+    {
+        immediate: true,
+    }
+)
 
 </script>
 
 <template>
+
     <div class="common-layout">
+        <el-watermark :content="['Minecraft基岩版', '联机大厅']" :font="font" :zIndex="1">
 
-        <el-container>
-            <el-header>
-                <el-row class="header-container" justify="center">
-                    <el-col><h2 class="title">{{ $t('locale.title') }}</h2></el-col>
-                    <el-col :span="21" class="input-with-select">
-                        <el-input
-                            v-model="searchContent"
-                            :placeholder="$t('search.placeholder')"
-                            clearable
-                            style="min-width: auto"
-                            @clear="clearBtn()"
-                            @input="inputBtn()"
-                        >
-                            <template #prepend>
-                                <el-select v-model="searchName" style="width: auto;min-width: 100px;">
-                                    <el-option :label="$t('search.hostName')" value="hostName"/>
-                                    <el-option :label="$t('search.userName')" value="userName"/>
-                                </el-select>
+            <el-container>
+                <el-header>
+                    <el-row class="header-container" justify="center" style="z-index: 1000 !important;">
+                        <el-col><h2 class="title">{{ $t('locale.title') }}</h2></el-col>
+                        <el-col :span="21" class="input-with-select">
+                            <el-input
+                                v-model="searchContent"
+                                :placeholder="$t('search.placeholder')"
+                                clearable
+                                style="min-width: auto"
+                                @clear="clearBtn()"
+                                @input="inputBtn()"
+                            >
+                                <template #prepend>
+                                    <el-select v-model="searchName" style="width: auto;min-width: 100px;">
+                                        <el-option :label="$t('search.hostName')" value="hostName"/>
+                                        <el-option :label="$t('search.userName')" value="userName"/>
+                                    </el-select>
+                                </template>
+                                <template #append>
+                                    <el-button :icon="Search" @click="searchBtn()"/>
+                                </template>
+                            </el-input>
+                        </el-col>
+                        <el-col class="room-total">
+                            {{ $t('total.all') }}
+                            <el-tag>{{ room_count }}</el-tag>
+                            {{ $t('total.room') }}
+                        </el-col>
+                        <el-col>
+                        </el-col>
+                    </el-row>
+
+
+                </el-header>
+                <el-main>
+                    <el-scrollbar height="100%">
+                        <el-empty :class="isNull">
+                            <template #description>
+                                <p>
+                                    {{ $t('locale.null') }}
+                                </p>
+                                <p>
+                                    {{ $t('locale.friend') }}
+                                </p>
                             </template>
-                            <template #append>
-                                <el-button :icon="Search" @click="searchBtn()"/>
-                            </template>
-                        </el-input>
-                    </el-col>
-                    <el-col class="room-total">
-                        {{ $t('total.all') }}
-                        <el-tag>{{ room_count }}</el-tag>
-                        {{ $t('total.room') }}
-                    </el-col>
-                    <el-col>
-                    </el-col>
-                </el-row>
+                        </el-empty>
+
+                        <div class="card-container">
 
 
-            </el-header>
-            <el-main>
-                <el-scrollbar height="100%">
-                    <el-empty :class="isNull">
-                        <template #description>
-                            <p>
-                                {{ $t('locale.null') }}
-                            </p>
-                            <p>
-                                {{ $t('locale.friend') }}
-                            </p>
-                        </template>
-                    </el-empty>
-
-                    <div class="card-container">
-
-
-                        <el-card v-for="d in room_data" class="centered-card">
-                            <template #header>
-                                <div class="card-header">
+                            <el-card v-for="d in room_data" class="centered-card" style="z-index: 1000 !important;">
+                                <template #header>
+                                    <div class="card-header">
 
                                     <span class="gamerName"
                                           v-html="parseMinecraftColors(d.customProperties.worldName)"></span>
 
-                                </div>
-                            </template>
-                            <template #default>
-                                <p>{{
-                                        $t('room.hostName')
-                                    }}
-                                    <el-image
-                                        :src="'https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/'+''+d.customProperties.ownerId+'/image/head'"
-                                        style="width: 1em;" @click="showSkin(d.customProperties.ownerId)"/>
-                                    <span style="margin-left: 0.5em" @click="copyText(d.customProperties.hostName)">{{
-                                            d.customProperties.hostName
-                                        }}</span>
-                                </p>
-                                <p>{{ $t('room.MemberCount') }}{{ d.customProperties.MemberCount }}/{{
-                                        d.customProperties.MaxMemberCount
-                                    }}</p>
-                                <p>{{ $t('room.gameMode') }}{{
-                                        gameMode(d.customProperties.worldType, d.customProperties.isHardcore)
-                                    }}</p>
-                                <p>{{ $t('room.createTime') }}{{ changeTime(d.createTime) }}</p>
+                                    </div>
+                                </template>
+                                <template #default>
+                                    <p>{{
+                                            $t('room.hostName')
+                                        }}
+                                        <el-image
+                                            :src="'https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/'+''+d.customProperties.ownerId+'/image/head'"
+                                            style="width: 1em;" @click="showSkin(d.customProperties.ownerId)"/>
+                                        <span style="margin-left: 0.5em" @click="copyText(d.customProperties.hostName)">{{
+                                                d.customProperties.hostName
+                                            }}</span>
+                                    </p>
+                                    <p>{{ $t('room.MemberCount') }}{{ d.customProperties.MemberCount }}/{{
+                                            d.customProperties.MaxMemberCount
+                                        }}</p>
+                                    <p>{{ $t('room.gameMode') }}{{
+                                            gameMode(d.customProperties.worldType, d.customProperties.isHardcore)
+                                        }}</p>
+                                    <p>{{ $t('room.createTime') }}{{ changeTime(d.createTime) }}</p>
 
-                                <el-progress
-                                    :class="progressHide"
-                                    :percentage="d.customProperties.MemberCount / d.customProperties.MaxMemberCount * 100"
-                                    type="circle"
-                                    @click="showSkin(d.customProperties.ownerId,'avatar')">
-                                    <template #default>
+                                    <el-progress
+                                        :class="progressHide"
+                                        :percentage="d.customProperties.MemberCount / d.customProperties.MaxMemberCount * 100"
+                                        type="circle"
+                                        @click="showSkin(d.customProperties.ownerId,'avatar')">
+                                        <template #default>
 
-                                        <el-avatar :size="100"
-                                                   :src="showAvatar(d.customProperties.ownerId)"
-                                        />
-                                    </template>
+                                            <el-avatar :size="100"
+                                                       :src="showAvatar(d.customProperties.ownerId)"
+                                            />
+                                        </template>
 
-                                </el-progress>
-                            </template>
-                            <template #footer>
-                                <el-tag type="primary">{{ d.customProperties.version }}</el-tag>
-                                <el-button
-                                    :disabled="isBtnDisabled(d.customProperties.MemberCount, d.customProperties.MaxMemberCount, d.customProperties.BroadcastSetting) || clickedButtons.has(d.id)"
-                                    class="check-btn" size="small"
-                                    type="primary"
-                                    @click="wsJoin(d.roomfrom,d.id,d.sessionRef.name)">
-                                    {{
-                                        joinBtn(d.customProperties.MemberCount, d.customProperties.MaxMemberCount, d.customProperties.BroadcastSetting)
-                                    }}
-                                </el-button>
+                                    </el-progress>
+                                </template>
+                                <template #footer>
+                                    <el-tag type="primary">{{ d.customProperties.version }}</el-tag>
+                                    <el-button
+                                        :disabled="isBtnDisabled(d.customProperties.MemberCount, d.customProperties.MaxMemberCount, d.customProperties.BroadcastSetting) || clickedButtons.has(d.id)"
+                                        class="check-btn" size="small"
+                                        type="primary"
+                                        @click="wsJoin(d.roomfrom,d.id,d.sessionRef.name)">
+                                        {{
+                                            joinBtn(d.customProperties.MemberCount, d.customProperties.MaxMemberCount, d.customProperties.BroadcastSetting)
+                                        }}
+                                    </el-button>
 
-                            </template>
-                        </el-card>
+                                </template>
+                            </el-card>
+                        </div>
+                    </el-scrollbar>
+
+                </el-main>
+                <el-footer>
+                    <div class="footer">
+
+                        {{ $t('locale.link') }}
+                        <el-link href="https://t.me/MCBE_Group"
+                                 type="primary">TG MC版本推送频道
+                        </el-link>
+
                     </div>
-                </el-scrollbar>
-
-            </el-main>
-            <el-footer>
-                <div class="footer">
-
-                    {{ $t('locale.link') }}
-                    <el-link href="https://t.me/MCBE_Group"
-                             type="primary">TG MC版本推送频道
-                    </el-link>
-
-                </div>
-            </el-footer>
-        </el-container>
+                </el-footer>
+            </el-container>
+        </el-watermark>
 
         <el-config-provider :locale="zhCn">
             <el-tour v-model="store.Tour" :z-index="100000" @change="changeTour" @close="store.Tour = false">
@@ -558,7 +575,7 @@ const changeTour = (current: number): void => {
                 <el-tour-step placement="top" title="加入房间最后一步">
                     <template #default>
                         最后在下方选择自己喜欢的房间点击显示房间即可，等待显示加入成功后在游戏好友页面会显示房间列表，Ore
-                        UI用户则会在游戏上方显示邀请加入房间的弹窗点击加入即可。
+                        UI用户则会在游戏上方显示邀请加入房间的弹窗点击加入即可(如不显示则需要点击复制房主的名字添加好友在进去房间后再好友列表的点击加入)。
                     </template>
                 </el-tour-step>
                 <el-tour-step placement="top" title="展示房间">
