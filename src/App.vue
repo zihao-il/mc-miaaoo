@@ -472,7 +472,7 @@ watch(
                         <div class="card-container">
 
 
-                            <el-card v-for="d in room_data" class="centered-card" style="z-index: 1000 !important;">
+                            <el-card v-for="d in room_data" class="centered-card" style="z-index: 10 !important;">
                                 <template #header>
                                     <div class="card-header">
 
@@ -575,7 +575,7 @@ watch(
                 <el-tour-step placement="top" title="加入房间最后一步">
                     <template #default>
                         最后在下方选择自己喜欢的房间点击显示房间即可，等待显示加入成功后在游戏好友页面会显示房间列表，Ore
-                        UI用户则会在游戏上方显示邀请加入房间的弹窗点击加入即可(如不显示则需要点击复制房主的名字添加好友在进去房间后再好友列表的点击加入)。
+                        UI用户则会在游戏上方显示邀请加入房间的弹窗点击加入即可(如不显示则需要点击复制房主的名字添加好友再加入房间后在好友列表中点击加入)。
                     </template>
                 </el-tour-step>
                 <el-tour-step placement="top" title="展示房间">
@@ -610,7 +610,7 @@ watch(
         <el-button :disabled="isDisabled" :icon="RefreshRight" circle size="large" type="primary"
                    @click="handleClick()"/>
     </el-affix>
-    <el-backtop :bottom="80" :right="80"/>
+    <el-backtop :bottom="80" :right="80" style="z-index: 10 !important;"/>
     <el-dialog v-model="dialogFormVisible" :title="$t('setting.title')" :width="dialogStyle()"
                :z-index="99999" height="300">
         <el-row>
@@ -838,7 +838,7 @@ watch(
 
 .affix-right-bottom {
     position: fixed;
-    z-index: 999;
+    z-index: 99999;
     right: 20px;
     bottom: 20px;
 }
