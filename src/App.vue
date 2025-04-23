@@ -216,7 +216,7 @@ const metaThemeColor = (): void => {
     }
 };
 
-const wsJoin = async (roomFrom: string, id: string, name: string): Promise<void> => {
+const wsJoin = async (roomFrom: number, id: string, name: string): Promise<void> => {
     ElNotification({
         title: t('locale.joining'),
         message: t('locale.joiningMessage'),
@@ -227,9 +227,9 @@ const wsJoin = async (roomFrom: string, id: string, name: string): Promise<void>
     clickedButtons.add(id);
 
     const Friends = JSON.parse(store.Friends)
-    const setId = Friends.id
+    const setId = String(Friends.id)
     try {
-        await mc_join(roomFrom, setId, id, name, store.Xuid);
+        await mc_join(roomFrom, setId, id, name, store.Xuid, store.VerifyCode);
     } catch (e) {
         ElNotification({
             title: t('locale.JoinsError'),
@@ -419,7 +419,7 @@ watch(
 <template>
 
     <div class="common-layout">
-        <el-watermark :content="['Minecraft基岩版', '联机大厅']" :font="font" :zIndex="1">
+        <el-watermark :content="['Minecraft基岩版', '联机大厅']" :font="font" :zIndex="1" style="height: 100vh">
 
             <el-container>
                 <el-header>
@@ -537,7 +537,7 @@ watch(
 
                         {{ $t('locale.link') }}
                         <el-link href="https://t.me/MCBE_Group"
-                                 type="primary">TG MC版本推送频道
+                                 type="primary">MC版本推送频道
                         </el-link>
 
                     </div>
@@ -667,11 +667,24 @@ watch(
                     :placeholder="$t('setting.inputXuid')"
                     maxlength="16"
                     show-word-limit
+                    style="margin-bottom: 1em"
                     type="text"
                     @blur="validateXuid"
                     @input="store.Xuid = store.Xuid.replace(/\D/g, '')"
                 >
                     <template #prepend>XUID</template>
+                </el-input>
+                <el-input
+                    v-model="store.VerifyCode"
+                    :placeholder="$t('setting.inputVerifyCode')"
+                    maxlength="6"
+                    show-word-limit
+                    style="margin-bottom: 1em"
+                    type="text"
+                    @blur="validateXuid"
+                    @input="store.VerifyCode = store.VerifyCode.replace(/\D/g, '')"
+                >
+                    <template #prepend>{{$t('setting.VerifyCode')}}</template>
                 </el-input>
             </el-col>
             <el-col :span="24" class="setText">

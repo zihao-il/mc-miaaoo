@@ -17,16 +17,22 @@ export const mc_list = (): Promise<any> => {
     })
 }
 
-export const mc_join = (roomFrom: string, addId: number, roomId: string, sessionName: string, userXuid: string): Promise<any> => {
+export const mc_join = (roomFrom: number, addId: string, roomId: string, sessionName: string, userXuid: string, verifyCode: string): Promise<any> => {
     return request({
         url: '/join',
         method: 'post',
-        params: {
-            roomfrom: roomFrom,
-            addid: addId,
-            roomid: roomId,
-            sessionname: sessionName,
-            userxuid: userXuid
+        data: {
+            version: '1.0.0',
+            joininformation: {
+                addid: addId,
+                roomfrom: roomFrom,
+                roomid: roomId,
+                sessionname: sessionName,
+            },
+            invitecontrol: {
+                userxuid: userXuid,
+                verifycode: verifyCode,
+            }
         }
     })
 }

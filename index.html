@@ -16,5 +16,27 @@
 <body>
 <div id="zihao_il"></div>
 <script src="/src/main.ts" type="module"></script>
+<script type="text/javascript">
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID = "338605c4-a073-4581-9c7c-44957a00aae4";
+    (function () {
+        var d = document;
+        var s = d.createElement("script");
+        s.src = "https://client.crisp.chat/l.js";
+        s.async = 1;
+        s.onload = function () {
+            $crisp.push(["config", "position:reverse"]);
+            const interval = setInterval(() => {
+                const box = document.querySelector("#crisp-chatbox");
+                if (box) {
+                    box.setAttribute("data-position-reverse", "true");
+                    clearInterval(interval);
+                }
+            }, 100);
+        };
+
+        d.getElementsByTagName("head")[0].appendChild(s);
+    })();
+</script>
 </body>
 </html>
