@@ -539,7 +539,11 @@ watch(
                         <el-link href="https://t.me/MCBE_Group"
                                  type="primary">MC版本推送频道
                         </el-link>
-
+                            <br>
+                        文档站
+                        <el-link href="https://docs.miaaoo.com/"
+                                 type="primary">大厅文档说明
+                        </el-link>
                     </div>
                 </el-footer>
             </el-container>
@@ -549,9 +553,8 @@ watch(
             <el-tour v-model="store.Tour" :z-index="100000" @change="changeTour" @close="store.Tour = false">
                 <el-tour-step title="欢迎来到这个网站">
                     <template #default>
-                        我将为你讲解网页使用说明，当然你也可以去B站观看
-                        <el-link href="" target="_blank" type="primary">视频教程</el-link>
-                        (还没做)
+                        我将为你讲解网页使用说明，当然你也可以去
+                        <el-link href="https://docs.miaaoo.com/" target="_blank" type="primary">文档站查看说明</el-link>
                         。
                         如果你是老用户可以点击右上角的X来关闭这个引导
                     </template>
