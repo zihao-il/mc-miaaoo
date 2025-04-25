@@ -544,6 +544,11 @@ watch(
                         <el-link href="https://docs.miaaoo.com/"
                                  type="primary">大厅文档说明
                         </el-link>
+                        <br>
+                        去除Ore UI版本
+                        <el-link href="https://bbk.endyun.ltd/alist/"
+                                 type="primary">点我下载
+                        </el-link>
                     </div>
                 </el-footer>
             </el-container>
