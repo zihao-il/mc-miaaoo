@@ -216,7 +216,7 @@ const metaThemeColor = (): void => {
     }
 };
 
-const wsJoin = async (roomFrom: number, id: string, name: string): Promise<void> => {
+const wsJoin = async (roomFrom: string, id: string, name: string): Promise<void> => {
     ElNotification({
         title: t('locale.joining'),
         message: t('locale.joiningMessage'),

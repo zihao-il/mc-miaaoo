@@ -13,11 +13,11 @@ const request: AxiosInstance = axios.create({
 export const mc_list = (): Promise<any> => {
     return request({
         url: '/list',
-        method: 'post',
+        method: 'get',
     })
 }
 
-export const mc_join = (roomFrom: number, addId: string, roomId: string, sessionName: string, userXuid: string, verifyCode: string): Promise<any> => {
+export const mc_join = (roomFrom: string, addId: string, roomId: string, sessionName: string, userXuid: string, verifyCode: string): Promise<any> => {
     return request({
         url: '/join',
         method: 'post',
