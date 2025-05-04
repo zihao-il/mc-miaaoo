@@ -419,7 +419,8 @@ watch(
 <template>
 
     <div class="common-layout">
-        <el-watermark :content="['Minecraft基岩版', '联机大厅']" :font="font" :zIndex="1" style="height: 100vh">
+        <el-watermark :content="['Minecraft基岩版', '联机大厅']" :font="font" :zIndex="1"
+                      style="height: 100%; min-height: 100vh;">
 
             <el-container>
                 <el-header>
@@ -539,7 +540,7 @@ watch(
                         <el-link href="https://t.me/MCBE_Group"
                                  type="primary">MC版本推送频道
                         </el-link>
-                            <br>
+                        <br>
                         文档站
                         <el-link href="https://docs.miaaoo.com/"
                                  type="primary">大厅文档说明
@@ -850,6 +851,7 @@ watch(
 }
 
 .footer {
+    padding-bottom: 1em;
     text-align: center;
 }
 
