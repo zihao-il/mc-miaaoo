@@ -177,7 +177,7 @@ const parseMinecraftColors = (text: string): string => {
             let unicodeNumber = Number(unicodeValue.slice(1));
             if (unicodeNumber >= 100 && unicodeNumber <= 113) {
                 const svgPath = `/svg/${unicodeValue.toString(16).toUpperCase()}.svg`;
-                return `<img src="${svgPath}" alt="${unicodeChar}" style="height: 1em; display: inline-block;" />`;
+                return `<img src="${svgPath}" alt="${unicodeChar}" style="height: 1em; display: inline-block; vertical-align: middle;" />`;
             }
             return `<span>${unicodeChar}</span>`;
 
@@ -229,7 +229,7 @@ const wsJoin = async (roomFrom: string, id: string, name: string): Promise<void>
     const Friends = JSON.parse(store.Friends)
     const setId = String(Friends.id)
     try {
-        await mc_join(roomFrom, setId, id, name, store.Xuid, store.VerifyCode);
+        await mc_join(roomFrom, setId, id, name, store.Xuid);
     } catch (e) {
         ElNotification({
             title: t('locale.JoinsError'),
@@ -488,7 +488,8 @@ watch(
                                         }}
                                         <el-image
                                             :src="'https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/'+''+d.customProperties.ownerId+'/image/head'"
-                                            style="width: 1em;" @click="showSkin(d.customProperties.ownerId)"/>
+                                            style="width: 1em; vertical-align: sub;"
+                                            @click="showSkin(d.customProperties.ownerId)"/>
                                         <span style="margin-left: 0.5em" @click="copyText(d.customProperties.hostName)">{{
                                                 d.customProperties.hostName
                                             }}</span>
@@ -578,13 +579,13 @@ watch(
                 </el-tour-step>
                 <el-tour-step :target="refXuidSetting?.$el" placement="top" title="加入房间第三步">
                     <template #default>
-                        如果你是Ore UI用户请在下面你的用户名然后点击生成XUID则会自动填充，并在主页面点击左边的蓝色按钮联系客服发送自己的XUID申请验证码。
+                        如果你是Ore UI用户请在下面你的用户名然后点击生成XUID则会自动填充。
                     </template>
                 </el-tour-step>
                 <el-tour-step placement="top" title="加入房间最后一步">
                     <template #default>
                         最后在下方选择自己喜欢的房间点击显示房间即可，等待显示加入成功后在游戏好友页面会显示房间列表，<br>Ore
-                        UI用户需要(WIN: Game Bar组件,安卓：FCM推送支持)并且申请了验证码<br>如果不支持推送则需要点击复制房主的名字添加好友再加入房间后在好友列表中点击加入。
+                        UI用户需要(WIN: Game Bar组件,安卓：FCM推送支持)<br>如果不支持推送则需要点击复制房主的名字添加好友再加入房间后在好友列表中点击加入。
                     </template>
                 </el-tour-step>
                 <el-tour-step placement="top" title="展示房间">
@@ -682,18 +683,6 @@ watch(
                     @input="store.Xuid = store.Xuid.replace(/\D/g, '')"
                 >
                     <template #prepend>XUID</template>
-                </el-input>
-                <el-input
-                    v-model="store.VerifyCode"
-                    :placeholder="$t('setting.inputVerifyCode')"
-                    maxlength="6"
-                    show-word-limit
-                    style="margin-bottom: 1em"
-                    type="text"
-                    @blur="validateXuid"
-                    @input="store.VerifyCode = store.VerifyCode.replace(/\D/g, '')"
-                >
-                    <template #prepend>{{ $t('setting.VerifyCode') }}</template>
                 </el-input>
             </el-col>
             <el-col :span="24" class="setText">
