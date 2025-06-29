@@ -21,8 +21,8 @@ const {t} = useI18n();
 let room_data = ref<any[]>([]);
 let room_count = ref<number>(0);
 let newRoom = ref<any[]>([]);
-let isNull = ref<string>("hide");
-let progressHide = ref<string>("");
+let isNull = ref<boolean>(false);
+let progressHide = ref<boolean>(true);
 const isDisabled = ref<boolean>(false);
 let dialogFormVisible = ref<boolean>(false);
 let dialogNotifyVisible = ref<boolean>(false);
@@ -64,7 +64,7 @@ const getRoomData = async (): Promise<void> => {
         }
         newRoom.value = room_data.value
         room_count.value = room_data.value.length;
-        isNull.value = room_data.value.length === 0 ? "" : "hide";
+        isNull.value = room_data.value.length === 0;
     } catch (e) {
         ElNotification({
             title: t('locale.error'),
@@ -336,7 +336,7 @@ const showSkin = (xuid: string, type: string = 'btn'): void => {
 
 const showAvatar = (xuid: string): string => {
     if (store.ShowSkin.length === 0) {
-        progressHide.value = "hide"
+        progressHide.value = false
         return '';
     } else {
         return `https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/${xuid}/image/avatar`;
@@ -459,7 +459,7 @@ watch(
                 </el-header>
                 <el-main>
                     <el-scrollbar height="100%">
-                        <el-empty :class="isNull">
+                        <el-empty v-if="isNull">
                             <template #description>
                                 <p>
                                     {{ $t('locale.null') }}
@@ -503,7 +503,7 @@ watch(
                                     <p>{{ $t('room.createTime') }}{{ changeTime(d.createTime) }}</p>
 
                                     <el-progress
-                                        :class="progressHide"
+                                        v-if="progressHide"
                                         :percentage="d.customProperties.MemberCount / d.customProperties.MaxMemberCount * 100"
                                         type="circle"
                                         @click="showSkin(d.customProperties.ownerId,'avatar')">
@@ -842,10 +842,6 @@ watch(
 .footer {
     padding-bottom: 1em;
     text-align: center;
-}
-
-.hide {
-    display: none;
 }
 
 .affix-right-bottom {
