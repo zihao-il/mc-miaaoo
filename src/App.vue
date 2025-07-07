@@ -488,7 +488,8 @@ watch(
                                         }}
                                         <el-image
                                             :src="'https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/'+''+d.customProperties.ownerId+'/image/head'"
-                                            style="width: 1em; vertical-align: sub;"
+                                            class="headImage"
+                                            style="width: 1em;"
                                             @click="showSkin(d.customProperties.ownerId)"/>
                                         <span style="margin-left: 0.5em" @click="copyText(d.customProperties.hostName)">{{
                                                 d.customProperties.hostName
@@ -910,5 +911,8 @@ watch(
     overflow: visible;
 }
 
+:deep(.headImage .el-image__inner) {
+    vertical-align: middle !important;
+}
 
 </style>
