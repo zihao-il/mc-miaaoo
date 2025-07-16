@@ -654,6 +654,9 @@ watch(
                     <el-radio :value="JSON.stringify({ id: 5, name: 'HelloMC25a' })" size="large">
                         {{ $t('setting.joinUser4') }}
                     </el-radio>
+                    <el-radio :value="JSON.stringify({ id: 6, name: 'HelloMC25b5988' })" size="large">
+                        {{ $t('setting.joinUser5') }}
+                    </el-radio>
                 </el-radio-group>
 
             </el-col>
