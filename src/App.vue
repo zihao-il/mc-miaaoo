@@ -384,18 +384,13 @@ const copyText = async (text: string) => {
     } catch (e) {
         ElMessage({
             message: t('locale.copyError'),
-            type: 'success',
+            type: 'error',
         })
     }
 }
 
 const changeTour = (current: number): void => {
-    if (current === 2 || current === 3) {
-        dialogFormVisible.value = true
-    } else {
-        dialogFormVisible.value = false
-
-    }
+    dialogFormVisible.value = current === 2 || current === 3;
 
 }
 const font = reactive({
@@ -413,6 +408,11 @@ watch(
         immediate: true,
     }
 )
+
+const changeJoinUser = (value: string): void => {
+    copyText(JSON.parse(value).name)
+
+};
 
 </script>
 
@@ -640,7 +640,7 @@ watch(
                 <el-text size="large">{{ $t('setting.joinSetting') }}</el-text>
             </el-col>
             <el-col ref="refJoinSetting" :span="24">
-                <el-radio-group v-model="store.Friends">
+                <el-radio-group v-model="store.Friends" @change="changeJoinUser">
 
                     <el-radio :value="JSON.stringify({ id: 2, name: 'MultiMC23' })" size="large">
                         {{ $t('setting.joinUser1') }}
