@@ -490,7 +490,11 @@ const changeJoinUser = (value: string): void => {
                                             :src="'https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/'+''+d.customProperties.ownerId+'/image/head'"
                                             class="headImage"
                                             style="width: 1em;"
-                                            @click="showSkin(d.customProperties.ownerId)"/>
+                                            @click="showSkin(d.customProperties.ownerId)">
+                                            <template #error>
+                                            </template>
+                                        </el-image>
+
                                         <span style="margin-left: 0.5em" @click="copyText(d.customProperties.hostName)">{{
                                                 d.customProperties.hostName
                                             }}</span>
