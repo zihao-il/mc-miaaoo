@@ -411,7 +411,7 @@ watch(
 
 
 const changeJoinUser = (value: string): void => {
-    copyText(value)
+    copyText(JSON.parse(value).name)
 
 };
 
