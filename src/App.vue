@@ -226,10 +226,8 @@ const wsJoin = async (roomFrom: string, id: string, name: string): Promise<void>
     });
     if (clickedButtons.has(id)) return;
     clickedButtons.add(id);
-    let setId = "2"
-    if (store.Friends) {
-        setId = String(store.Friends.id)
-    }
+    const Friends = JSON.parse(store.Friends)
+    const setId = String(Friends.id)
     try {
         await mc_join(roomFrom, setId, id, name, store.Xuid);
     } catch (e) {
@@ -420,10 +418,10 @@ const changeJoinUser = (value: string): void => {
 const getAccount = async (): Promise<void> => {
     const {data} = await mc_account();
     accounts.value = data
-    if (store.Friends === null) {
+    if (store.Friends === "") {
         const firstValid = data.find((item: any) => item.canaddfriends);
         if (firstValid) {
-            store.Friends = firstValid;
+            store.Friends = JSON.stringify(firstValid);
         }
     }
 }
@@ -658,8 +656,8 @@ const getAccount = async (): Promise<void> => {
                 <el-text size="large">{{ $t('setting.joinSetting') }}</el-text>
             </el-col>
             <el-col ref="refJoinSetting" :span="24">
-                <el-radio-group v-model="store.Friends.name" @change="changeJoinUser">
-                    <el-radio v-for="item in accounts" :value="item.name" size="large">
+                <el-radio-group v-model="store.Friends" @change="changeJoinUser">
+                    <el-radio v-for="item in accounts" :value="JSON.stringify(item)" size="large">
                         {{ item.name }}{{ item.canaddfriends ? $t('setting.userJoin') : $t('setting.userFull') }}
                     </el-radio>
                 </el-radio-group>
