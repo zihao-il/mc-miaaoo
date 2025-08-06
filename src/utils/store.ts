@@ -8,7 +8,7 @@ type Friend = {
 
 export const useMCOnlineStore = defineStore('MCOnline', {
     state: () => ({
-        Friends: null as Friend | null,
+        Friends: { id: '2', name: 'MultiMC23', canaddfriends: false } as Friend,
         ShowRoom: [{id: 0, name: "unavailable"}],
         Language: "zhHans",
         Notify: false,

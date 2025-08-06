@@ -45,12 +45,6 @@ import {useMCOnlineStore} from './utils/store'
 
 const store = useMCOnlineStore()
 
-type Friend = {
-    id: string | number
-    name: string
-    canaddfriends?: boolean
-}
-
 const getRoomData = async (): Promise<void> => {
     const loading = ElLoading.service({
         lock: true,
@@ -418,19 +412,20 @@ watch(
 )
 
 
-const changeJoinUser = (value: Friend): void => {
-    copyText(value.name)
+const changeJoinUser = (value: string): void => {
+    copyText(value)
 
 };
 
 const getAccount = async (): Promise<void> => {
     const {data} = await mc_account();
     accounts.value = data
-    const firstValid = data.find((item: any) => item.canaddfriends);
-    if (firstValid) {
-        store.Friends = firstValid;
+    if (store.Friends === null) {
+        const firstValid = data.find((item: any) => item.canaddfriends);
+        if (firstValid) {
+            store.Friends = firstValid;
+        }
     }
-
 }
 
 </script>
@@ -663,8 +658,8 @@ const getAccount = async (): Promise<void> => {
                 <el-text size="large">{{ $t('setting.joinSetting') }}</el-text>
             </el-col>
             <el-col ref="refJoinSetting" :span="24">
-                <el-radio-group v-model="store.Friends" @change="changeJoinUser">
-                    <el-radio v-for="item in accounts" :value="item" size="large">
+                <el-radio-group v-model="store.Friends.name" @change="changeJoinUser">
+                    <el-radio v-for="item in accounts" :value="item.name" size="large">
                         {{ item.name }}{{ item.canaddfriends ? $t('setting.userJoin') : $t('setting.userFull') }}
                     </el-radio>
                 </el-radio-group>
