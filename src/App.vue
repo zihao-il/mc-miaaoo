@@ -45,6 +45,12 @@ import {useMCOnlineStore} from './utils/store'
 
 const store = useMCOnlineStore()
 
+type Friend = {
+    id: string | number
+    name: string
+    canaddfriends?: boolean
+}
+
 const getRoomData = async (): Promise<void> => {
     const loading = ElLoading.service({
         lock: true,
@@ -226,8 +232,10 @@ const wsJoin = async (roomFrom: string, id: string, name: string): Promise<void>
     });
     if (clickedButtons.has(id)) return;
     clickedButtons.add(id);
-
-    const setId = String(store.Friends.id)
+    let setId = "2"
+    if (store.Friends) {
+        setId = String(store.Friends.id)
+    }
     try {
         await mc_join(roomFrom, setId, id, name, store.Xuid);
     } catch (e) {
@@ -410,7 +418,7 @@ watch(
 )
 
 
-const changeJoinUser = (value: JSON): void => {
+const changeJoinUser = (value: Friend): void => {
     copyText(value.name)
 
 };
