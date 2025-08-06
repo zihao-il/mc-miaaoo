@@ -5,6 +5,7 @@ import Components from 'unplugin-vue-components/vite'
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 import {compression, defineAlgorithm} from "vite-plugin-compression2";
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
+import { createHash } from 'node:crypto'
 
 // https://vite.dev/config/
 export default defineConfig({
