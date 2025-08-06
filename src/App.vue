@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {mc_list, mc_join, mc_xuid} from "./utils/axios";
+import {mc_list, mc_join, mc_xuid, mc_account} from "./utils/axios";
 import {ref, onMounted, h, reactive, watch} from "vue";
 import {RefreshRight, Sunny, Moon, Setting, Search} from '@element-plus/icons-vue';
 import {ElLoading, ElNotification, ElMessage} from "element-plus";
@@ -39,7 +39,7 @@ const refXuidSetting = ref<ButtonInstance>();
 const dialogStyle = (): string => {
     return window.innerWidth > 600 ? '600px' : '90%'
 }
-
+const accounts = ref<any[]>([]);
 
 import {useMCOnlineStore} from './utils/store'
 
@@ -86,6 +86,7 @@ onMounted(() => {
     getRoomData();
     metaThemeColor();
     dialogNotifyVisible.value = store.Notify
+    getAccount()
 });
 
 const gameMode = (mode: string, isHar: boolean): string => {
@@ -226,8 +227,7 @@ const wsJoin = async (roomFrom: string, id: string, name: string): Promise<void>
     if (clickedButtons.has(id)) return;
     clickedButtons.add(id);
 
-    const Friends = JSON.parse(store.Friends)
-    const setId = String(Friends.id)
+    const setId = String(store.Friends.id)
     try {
         await mc_join(roomFrom, setId, id, name, store.Xuid);
     } catch (e) {
@@ -409,10 +409,21 @@ watch(
     }
 )
 
-const changeJoinUser = (value: string): void => {
-    copyText(JSON.parse(value).name)
+
+const changeJoinUser = (value: JSON): void => {
+    copyText(value.name)
 
 };
+
+const getAccount = async (): Promise<void> => {
+    const {data} = await mc_account();
+    accounts.value = data
+    const firstValid = data.find((item: any) => item.canaddfriends);
+    if (firstValid) {
+        store.Friends = firstValid;
+    }
+
+}
 
 </script>
 
@@ -645,21 +656,8 @@ const changeJoinUser = (value: string): void => {
             </el-col>
             <el-col ref="refJoinSetting" :span="24">
                 <el-radio-group v-model="store.Friends" @change="changeJoinUser">
-
-                    <el-radio :value="JSON.stringify({ id: 2, name: 'MultiMC23' })" size="large">
-                        {{ $t('setting.joinUser1') }}
-                    </el-radio>
-                    <el-radio :value="JSON.stringify({ id: 3, name: 'gouhope' })" size="large">
-                        {{ $t('setting.joinUser2') }}
-                    </el-radio>
-                    <el-radio :value="JSON.stringify({ id: 4, name: 'HelloMC25' })" size="large">
-                        {{ $t('setting.joinUser3') }}
-                    </el-radio>
-                    <el-radio :value="JSON.stringify({ id: 5, name: 'HelloMC25a' })" size="large">
-                        {{ $t('setting.joinUser4') }}
-                    </el-radio>
-                    <el-radio :value="JSON.stringify({ id: 6, name: 'HelloMC25b5988' })" size="large">
-                        {{ $t('setting.joinUser5') }}
+                    <el-radio v-for="item in accounts" :value="item" size="large">
+                        {{ item.name }}{{ item.canaddfriends ? $t('setting.userJoin') : $t('setting.userFull') }}
                     </el-radio>
                 </el-radio-group>
 

@@ -45,3 +45,10 @@ export const mc_xuid = (Xuid: string): Promise<any> => {
         }
     })
 }
+
+export const mc_account = (): Promise<any> => {
+    return request({
+        url: '/account',
+        method: 'get',
+    })
+}

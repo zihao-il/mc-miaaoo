@@ -2,7 +2,7 @@ import {defineStore} from 'pinia'
 
 export const useMCOnlineStore = defineStore('MCOnline', {
     state: () => ({
-        Friends: "{\"id\":6,\"name\":\"HelloMC25b5988\"}",
+        Friends: {},
         ShowRoom: [{id: 0, name: "unavailable"}],
         Language: "zhHans",
         Notify: false,
