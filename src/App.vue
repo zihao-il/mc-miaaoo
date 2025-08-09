@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {mc_list, mc_join, mc_xuid, mc_account} from "./utils/axios";
+import {mc_list, mc_join, mc_account, mc_profile} from "./utils/axios";
 import {ref, onMounted, h, reactive, watch} from "vue";
 import {RefreshRight, Sunny, Moon, Setting, Search} from '@element-plus/icons-vue';
 import {ElLoading, ElNotification, ElMessage} from "element-plus";
@@ -351,10 +351,11 @@ const validateXuid = (): void => {
     }
 };
 
-const getXuid = async (xuid: string): Promise<void> => {
+const getXuid = async (gt: string): Promise<void> => {
     try {
-        const {data} = await mc_xuid(xuid);
-        store.Xuid = String(data)
+        const {data} = await mc_profile(gt);
+        store.Xuid = String(data.profileUsers[0].id)
+        store.Avatar = String(data.profileUsers[0].settings[0].value)
         ElNotification({
             title: t('setting.xuidSuccess'),
             message: t('setting.xuidSuccessMessage'),
@@ -641,6 +642,13 @@ const getAccount = async (): Promise<void> => {
     <el-dialog v-model="dialogFormVisible" :title="$t('setting.title')" :width="dialogStyle()"
                :z-index="99999" height="300">
         <el-row>
+            <el-avatar
+                v-if="store.Avatar"
+                :size="60"
+                :src="store.Avatar"
+                class="xbox-avatar"
+                shape="square"
+            />
             <el-col :span="24" class="setText">
                 <el-text size="large">{{ $t('setting.display') }}</el-text>
             </el-col>
@@ -919,6 +927,12 @@ const getAccount = async (): Promise<void> => {
 
 :deep(.headImage .el-image__inner) {
     vertical-align: middle !important;
+}
+
+.xbox-avatar {
+    position: absolute;
+    top: 1.5em;
+    right: 0;
 }
 
 </style>

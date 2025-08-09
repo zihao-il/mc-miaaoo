@@ -9,7 +9,6 @@ const request: AxiosInstance = axios.create({
     }
 })
 
-
 export const mc_list = (): Promise<any> => {
     return request({
         url: '/list',
@@ -35,20 +34,25 @@ export const mc_join = (roomFrom: string, addId: string, roomId: string, session
         }
     })
 }
-export const mc_xuid = (Xuid: string): Promise<any> => {
-    return request({
-        url: '/getxuid',
-        method: 'get',
-        params: {
-            gametag: Xuid,
-
-        }
-    })
-}
 
 export const mc_account = (): Promise<any> => {
     return request({
         url: '/account',
         method: 'get',
     })
+
+
+}
+
+export const mc_profile = (gt: string): Promise<any> => {
+    return request({
+        url: '/profile',
+        method: 'get',
+        params: {
+            gt: gt,
+
+        }
+    })
+
+
 }
