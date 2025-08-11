@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {mc_list, mc_join, mc_account, mc_profile} from "./utils/axios";
-import {ref, onMounted, h, reactive, watch} from "vue";
+import {ref, onMounted, h, reactive, watch, computed} from "vue";
+import {useWindowSize} from '@vueuse/core'
 import {RefreshRight, Sunny, Moon, Setting, Search} from '@element-plus/icons-vue';
 import {ElLoading, ElNotification, ElMessage} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
@@ -36,9 +37,9 @@ const gamerTag = ref<string>('');
 const refSettingBtn = ref<ButtonInstance>();
 const refJoinSetting = ref<ButtonInstance>();
 const refXuidSetting = ref<ButtonInstance>();
-const dialogStyle = (): string => {
-    return window.innerWidth > 600 ? '600px' : '90%'
-}
+const {width} = useWindowSize()
+const dialogStyle = computed(() => width.value > 600 ? '600px' : '90%')
+
 const accounts = ref<any[]>([]);
 
 import {useMCOnlineStore} from './utils/store'
@@ -639,7 +640,7 @@ const getAccount = async (): Promise<void> => {
                    @click="handleClick()"/>
     </el-affix>
     <el-backtop :bottom="80" :right="80" style="z-index: 10 !important;"/>
-    <el-dialog v-model="dialogFormVisible" :title="$t('setting.title')" :width="dialogStyle()"
+    <el-dialog v-model="dialogFormVisible" :title="$t('setting.title')" :width="dialogStyle"
                :z-index="99999" height="300">
         <el-row>
             <el-avatar
@@ -733,7 +734,7 @@ const getAccount = async (): Promise<void> => {
         :close-on-press-escape="false"
         :show-close="false"
         :title="$t('notify.title')"
-        :width="dialogStyle()"
+        :width="dialogStyle"
         :z-index="99999"
         class="dialogNotify"
     >
@@ -932,7 +933,7 @@ const getAccount = async (): Promise<void> => {
 .xbox-avatar {
     position: absolute;
     top: 1.5em;
-    right: 0;
+    right: 0.5em;
 }
 
 </style>
