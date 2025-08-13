@@ -5,6 +5,15 @@ import Components from 'unplugin-vue-components/vite'
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 import {compression, defineAlgorithm} from "vite-plugin-compression2";
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
+import { webcrypto } from 'node:crypto'
+
+declare global {
+    var crypto: Crypto
+}
+
+if (!globalThis.crypto) {
+    globalThis.crypto = webcrypto as unknown as Crypto
+}
 
 // https://vite.dev/config/
 export default defineConfig({
