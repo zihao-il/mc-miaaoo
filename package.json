@@ -14,7 +14,7 @@
     "@intlify/unplugin-vue-i18n": "^6.0.8",
     "@vueuse/core": "^13.6.0",
     "axios": "^1.11.0",
-    "element-plus": "^2.10.6",
+    "element-plus": "^2.10.7",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.5.0",
     "vue": "^3.5.18",
