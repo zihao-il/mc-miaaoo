@@ -558,7 +558,7 @@ const getAccount = async (): Promise<void> => {
 
                         {{ $t('locale.link') }}
                         <el-link href="https://t.me/MCBE_Group"
-                                 type="primary">MC版本推送频道
+                                 type="primary">{{ $t('locale.linkText') }}
                         </el-link>
                         <br>
                         文档站
@@ -577,39 +577,53 @@ const getAccount = async (): Promise<void> => {
 
         <el-config-provider :locale="zhCn">
             <el-tour v-model="store.Tour" :z-index="100000" @change="changeTour" @close="store.Tour = false">
-                <el-tour-step title="欢迎来到这个网站">
+                <el-tour-step :title="$t('step.title')">
                     <template #default>
-                        我将为你讲解网页使用说明，当然你也可以去
-                        <el-link href="https://docs.miaaoo.com/" target="_blank" type="primary">文档站查看说明</el-link>
-                        。
-                        如果你是老用户可以点击右上角的X来关闭这个引导
+                        {{ $t('step.text1') }}
+                        <el-link href="https://docs.miaaoo.com/" target="_blank" type="primary">{{ $t('step.text2') }}
+                        </el-link>
+                        {{ $t('step.text3') }}
+
+                        <el-radio-group v-model="store.Language" @change="changeLanguage()">
+
+                            <el-radio size="large" value="zhHans">
+                                {{ $t('setting.zhHans') }}
+                            </el-radio>
+                            <el-radio size="large" value="zhHant">
+                                {{ $t('setting.zhHant') }}
+                            </el-radio>
+                            <el-radio size="large" value="en">
+                                {{ $t('setting.en') }}
+                            </el-radio>
+                        </el-radio-group>
                     </template>
                 </el-tour-step>
-                <el-tour-step :target="refSettingBtn?.$el" placement="top" title="加入房间第一步">
+                <el-tour-step :target="refSettingBtn?.$el" :title="$t('step.joinOneTitle')" placement="top">
                     <template #default>
-                        首先点击下面的设置按钮
+                        {{ $t('step.joinOneText') }}
                     </template>
                 </el-tour-step>
-                <el-tour-step :target="refJoinSetting?.$el" placement="top" title="加入房间第二步">
+                <el-tour-step :target="refJoinSetting?.$el" :title="$t('step.joinTwoTitle')" placement="top">
                     <template #default>
-                        <el-link href="minecraft://" type="primary">打开Minecraft</el-link>
-                        后添加下面推荐名称的好友即可
+                        <el-link href="minecraft://" type="primary"> {{ $t('step.joinTwoText1') }}</el-link>
+                        {{ $t('step.joinTwoText2') }}
                     </template>
                 </el-tour-step>
-                <el-tour-step :target="refXuidSetting?.$el" placement="top" title="加入房间第三步">
+                <el-tour-step :target="refXuidSetting?.$el" :title="$t('step.joinThreeTitle')" placement="top">
                     <template #default>
-                        如果你是Ore UI用户请在下面你的用户名然后点击生成XUID则会自动填充。
+                        {{ $t('step.joinThreeText') }}
                     </template>
                 </el-tour-step>
-                <el-tour-step placement="top" title="加入房间最后一步">
+                <el-tour-step :title="$t('step.joinLastTitle')" placement="top">
                     <template #default>
-                        最后在下方选择自己喜欢的房间点击显示房间即可，等待显示加入成功后在游戏好友页面会显示房间列表，<br>Ore
-                        UI用户需要(WIN: Game Bar组件,安卓：FCM推送支持)<br>如果不支持推送则需要点击复制房主的名字添加好友再加入房间后在好友列表中点击加入。
+                        {{ $t('step.joinLastText1') }}<br>{{ $t('step.joinLastText2') }}<br>{{
+                            $t('step.joinLastText3')
+                        }}
                     </template>
                 </el-tour-step>
-                <el-tour-step placement="top" title="展示房间">
+                <el-tour-step placement="top" :title="$t('step.showTitle')">
                     <template #default>
-                        如果你需要在此网站中显示你的房间你需要完成“加入房间第二步”后在地图设置中的多人游戏中选择好友的好友后进入地图即可。
+                        {{ $t('step.showText') }}
                     </template>
                 </el-tour-step>
 

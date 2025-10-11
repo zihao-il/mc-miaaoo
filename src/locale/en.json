@@ -13,6 +13,7 @@
   "room.gameMode": "Game Mode: ",
   "room.createTime": "Creation Time: ",
   "locale.link": "Telegram Channel: ",
+  "locale.linkText": "MC version push channel",
   "setting.title": "Settings",
   "setting.display": "Display Settings",
   "setting.notJoin": "Hide unjoinable multiplayer games",
@@ -63,5 +64,23 @@
   "notify.placeholder": "Please confirm you have read the above content",
   "notify.text1": "Enter \"I have read\" or \"我已阅读\" or \"我已閱讀\" to continue accessing: ",
   "notify.text2": "Usage:",
-  "notify.text3": "First, add the friend 'HelloMC25' in Minecraft, then stay on the 'Friends' tab (where 'Joinable Realms' and 'Joinable Friends' are displayed). Return to the webpage, click the settings button in the bottom right, select 'HelloMC25,' and then select the room. After clicking, check the operation status displayed at the bottom of the webpage. If successful, return to the game to see if the room appears."
+  "notify.text3": "First, add the friend 'HelloMC25' in Minecraft, then stay on the 'Friends' tab (where 'Joinable Realms' and 'Joinable Friends' are displayed). Return to the webpage, click the settings button in the bottom right, select 'HelloMC25,' and then select the room. After clicking, check the operation status displayed at the bottom of the webpage. If successful, return to the game to see if the room appears.",
+  "step.title": "Welcome to this website",
+  "step.text1": "I will guide you through how to use this website. Of course, you can also visit the",
+  "step.text2": "Documentation site for instructions",
+  "step.text3": ". If you are an old user, you can click the X in the upper right corner to close this guide.",
+  "step.joinOneTitle": "Step 1: Join a Room",
+  "step.joinOneText": "First, click the settings button below.",
+  "step.joinTwoTitle": "Step 2: Join a Room",
+  "step.joinTwoText1": "Open Minecraft",
+  "step.joinTwoText2": "and add the recommended friend name below.",
+  "step.joinThreeTitle": "Step 3: Join a Room",
+  "step.joinThreeText": "Enter your username below, then click Generate XUID, and it will be filled in automatically.",
+  "step.joinLastTitle": "Final Step: Join a Room",
+  "step.joinLastText1": "Finally, choose your favorite room below and click Show Room. Once it shows ‘Join Successful’, the room list will appear in your in-game friends page.",
+  "step.joinLastText2": "Ore UI users need (WIN: Game Bar component, Android: FCM push support).",
+  "step.joinLastText3": "If push notifications are not supported, please copy the host’s name, add them as a friend, and after joining the room, click Join in your friends list.",
+  "step.showTitle": "Show Room",
+  "step.showText": "If you want your room to appear on this website, you need to complete “Step 2: Join a Room,” then enable Multiplayer in your map settings, select ‘Friends of Friends,’ and enter the map."
+
 }

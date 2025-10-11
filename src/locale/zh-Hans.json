@@ -13,6 +13,7 @@
   "room.gameMode": "游戏模式：",
   "room.createTime": "创建时间：",
   "locale.link": "TG频道：",
+  "locale.linkText": "MC版本推送频道",
   "setting.title": "设置",
   "setting.display": "显示设置",
   "setting.notJoin": "隐藏不可加入的多人游戏",
@@ -63,5 +64,23 @@
   "notify.placeholder": "请确认您已阅读以上内容",
   "notify.text1": "请输入“我已閱讀”或“我已阅读”或“I have read”以继续访问：",
   "notify.text2": "使用方法：",
-  "notify.text3": "先在 Minecraft 中添加好友“HelloMC25”，然后停留在“好友”标签页（即显示“可加入的 Realms”和“可加入的好友”的页面），返回网页，点击右下角的设置按钮，选择“HelloMC25”，然后选择房间。点击后，请查看网页底部显示操作是否成功。如果成功，请返回游戏查看是否显示房间。"
+  "notify.text3": "先在 Minecraft 中添加好友“HelloMC25”，然后停留在“好友”标签页（即显示“可加入的 Realms”和“可加入的好友”的页面），返回网页，点击右下角的设置按钮，选择“HelloMC25”，然后选择房间。点击后，请查看网页底部显示操作是否成功。如果成功，请返回游戏查看是否显示房间。",
+  "step.title": "欢迎来到这个网站",
+  "step.text1": "我将为你讲解网页使用说明，当然你也可以去",
+  "step.text2": "文档站查看说明",
+  "step.text3": "。如果你是老用户可以点击右上角的X来关闭这个引导",
+  "step.joinOneTitle": "加入房间第一步",
+  "step.joinOneText": "首先点击下面的设置按钮",
+  "step.joinTwoTitle": "加入房间第二步",
+  "step.joinTwoText1": "打开Minecraft",
+  "step.joinTwoText2": "后添加下面推荐名称的好友即可",
+  "step.joinThreeTitle": "加入房间第三步",
+  "step.joinThreeText": "请在下面你的用户名然后点击生成XUID则会自动填充。",
+  "step.joinLastTitle": "加入房间最后一步",
+  "step.joinLastText1": "最后在下方选择自己喜欢的房间点击显示房间即可，等待显示加入成功后在游戏好友页面会显示房间列表，",
+  "step.joinLastText2": "Ore UI用户需要(WIN: Game Bar组件,安卓：FCM推送支持)",
+  "step.joinLastText3": "如果不支持推送则需要点击复制房主的名字添加好友再加入房间后在好友列表中点击加入。",
+  "step.showTitle": "展示房间",
+  "step.showText": "如果你需要在此网站中显示你的房间你需要完成“加入房间第二步”后在地图设置中的多人游戏中启用多人游戏并选择好友的好友后进入地图即可。"
+
 }
