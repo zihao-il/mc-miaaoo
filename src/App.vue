@@ -428,6 +428,13 @@ const getAccount = async (): Promise<void> => {
     }
 }
 
+const languages = [
+    {value: 'zhHans', labelKey: 'setting.zhHans'},
+    {value: 'zhHant', labelKey: 'setting.zhHant'},
+    {value: 'en', labelKey: 'setting.en'},
+    {value: 'jp', labelKey: 'setting.jp'},
+]
+
 </script>
 
 <template>
@@ -586,14 +593,13 @@ const getAccount = async (): Promise<void> => {
 
                         <el-radio-group v-model="store.Language" @change="changeLanguage()">
 
-                            <el-radio size="large" value="zhHans">
-                                {{ $t('setting.zhHans') }}
-                            </el-radio>
-                            <el-radio size="large" value="zhHant">
-                                {{ $t('setting.zhHant') }}
-                            </el-radio>
-                            <el-radio size="large" value="en">
-                                {{ $t('setting.en') }}
+                            <el-radio
+                                v-for="lang in languages"
+                                :key="lang.value"
+                                :value="lang.value"
+                                size="large"
+                            >
+                                {{ $t(lang.labelKey) }}
                             </el-radio>
                         </el-radio-group>
                     </template>
@@ -621,7 +627,7 @@ const getAccount = async (): Promise<void> => {
                         }}
                     </template>
                 </el-tour-step>
-                <el-tour-step placement="top" :title="$t('step.showTitle')">
+                <el-tour-step :title="$t('step.showTitle')" placement="top">
                     <template #default>
                         {{ $t('step.showText') }}
                     </template>
@@ -730,14 +736,13 @@ const getAccount = async (): Promise<void> => {
             <el-col :span="24">
                 <el-radio-group v-model="store.Language" @change="changeLanguage()">
 
-                    <el-radio size="large" value="zhHans">
-                        {{ $t('setting.zhHans') }}
-                    </el-radio>
-                    <el-radio size="large" value="zhHant">
-                        {{ $t('setting.zhHant') }}
-                    </el-radio>
-                    <el-radio size="large" value="en">
-                        {{ $t('setting.en') }}
+                    <el-radio
+                        v-for="lang in languages"
+                        :key="lang.value"
+                        :value="lang.value"
+                        size="large"
+                    >
+                        {{ $t(lang.labelKey) }}
                     </el-radio>
                 </el-radio-group>
             </el-col>

@@ -1,6 +1,7 @@
 import zhHans from './zh-Hans.json'
 import zhHant from './zh-Hant.json'
 import en from './en.json'
+import jp from './jp.json'
 
 import {createI18n} from 'vue-i18n';
 
@@ -14,7 +15,8 @@ const createI18nInstance = () => {
         messages: {
             zhHans,
             zhHant,
-            en
+            en,
+            jp
         }
     });
     return i18n;
