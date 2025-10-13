@@ -420,19 +420,19 @@ const changeJoinUser = (value: string): void => {
 const getAccount = async (): Promise<void> => {
     const {data} = await mc_account();
     accounts.value = data
-    if (store.Friends === "") {
-        const firstValid = data.find((item: any) => item.canaddfriends);
-        if (firstValid) {
-            store.Friends = JSON.stringify(firstValid);
-        }
-    }
+    // if (store.Friends === "") {
+    //     const firstValid = data.find((item: any) => item.canaddfriends);
+    //     if (firstValid) {
+    //         store.Friends = JSON.stringify(firstValid);
+    //     }
+    // }
 }
 
 const languages = [
-    {value: 'zhHans', labelKey: 'setting.zhHans'},
-    {value: 'zhHant', labelKey: 'setting.zhHant'},
-    {value: 'en', labelKey: 'setting.en'},
-    {value: 'ja', labelKey: 'setting.ja'},
+    {value: 'zhHans', label: '简体中文'},
+    {value: 'zhHant', label: '繁体中文'},
+    {value: 'en', label: 'English'},
+    {value: 'ja', label: '日本語'},
 ]
 
 const RoomLangOption = computed(() => [
@@ -609,7 +609,7 @@ const RoomLangOption = computed(() => [
                                 :value="lang.value"
                                 size="large"
                             >
-                                {{ $t(lang.labelKey) }}
+                                {{ lang.label }}
                             </el-radio>
                         </el-radio-group>
                     </template>
@@ -621,8 +621,9 @@ const RoomLangOption = computed(() => [
                 </el-tour-step>
                 <el-tour-step :target="refJoinSetting?.$el" :title="$t('step.joinTwoTitle')" placement="top">
                     <template #default>
-                        <el-link href="minecraft://" type="primary"> {{ $t('step.joinTwoText1') }}</el-link>
-                        {{ $t('step.joinTwoText2') }}
+                        {{ $t('step.joinTwoText1') }}
+                        <el-link href="minecraft://" type="primary">{{ $t('step.joinTwoText2') }}</el-link>
+                        {{ $t('step.joinTwoText3') }}
                     </template>
                 </el-tour-step>
                 <el-tour-step :target="refXuidSetting?.$el" :title="$t('step.joinThreeTitle')" placement="top">
@@ -771,7 +772,7 @@ const RoomLangOption = computed(() => [
                         :value="lang.value"
                         size="large"
                     >
-                        {{ $t(lang.labelKey) }}
+                        {{ lang.label }}
                     </el-radio>
                 </el-radio-group>
             </el-col>
