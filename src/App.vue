@@ -694,7 +694,7 @@ const RoomLangOption = computed(() => [
             <el-col :span="24">
                 <el-select v-model="store.RoomNameLang" :placeholder="$t('setting.roomName')" :reserve-keyword="false"
                            :teleported="false"
-                           allow-create filterable style="width: 35%">
+                           allow-create filterable style="width: 45%">
                     <el-option
                         v-for="item in RoomLangOption"
                         :key="item.value"
