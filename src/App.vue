@@ -435,15 +435,14 @@ const languages = [
     {value: 'ja', labelKey: 'setting.ja'},
 ]
 
-
 const RoomLangOption = computed(() => [
-    { value: '', label: t('setting.roomNameNot') },
-    { value: 'zh', label: '中文' },
-    { value: 'en', label: 'English' },
-    { value: 'ja', label: '日本語' },
-    { value: 'ko', label: '한국어' },
-    { value: 'ru', label: 'Русский' },
-    { value: '', label: t('setting.roomNameOther'), disabled: true },
+    {value: '', label: t('setting.roomNameNot')},
+    {value: 'zh', label: '中文'},
+    {value: 'en', label: 'English'},
+    {value: 'ja', label: '日本語'},
+    {value: 'ko', label: '한국어'},
+    {value: 'ru', label: 'Русский'},
+    {value: '', label: t('setting.roomNameOther'), disabled: true},
 ])
 
 </script>
