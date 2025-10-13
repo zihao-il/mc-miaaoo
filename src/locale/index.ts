@@ -1,7 +1,7 @@
 import zhHans from './zh-Hans.json'
 import zhHant from './zh-Hant.json'
 import en from './en.json'
-import jp from './jp.json'
+import ja from './ja.json'
 
 import {createI18n} from 'vue-i18n';
 
@@ -16,7 +16,7 @@ const createI18nInstance = () => {
             zhHans,
             zhHant,
             en,
-            jp
+            ja
         }
     });
     return i18n;

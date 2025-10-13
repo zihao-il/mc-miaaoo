@@ -10,7 +10,8 @@ export const useMCOnlineStore = defineStore('MCOnline', {
         Xuid: "",
         Tour: true,
         VerifyCode: "",
-        Avatar: ""
+        Avatar: "",
+        RoomNameLang: ""
     }),
     actions: {},
     persist: {

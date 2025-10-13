@@ -56,7 +56,7 @@ const getRoomData = async (): Promise<void> => {
     let sources = store.ShowRoom
 
     try {
-        const {data} = await mc_list();
+        const {data} = await mc_list(store.RoomNameLang);
         room_data.value = data.results;
         if (sources.find((source) => source.id === 0)) {
             room_data.value = room_data.value.filter((room: any) => {
@@ -432,8 +432,41 @@ const languages = [
     {value: 'zhHans', labelKey: 'setting.zhHans'},
     {value: 'zhHant', labelKey: 'setting.zhHant'},
     {value: 'en', labelKey: 'setting.en'},
-    {value: 'jp', labelKey: 'setting.jp'},
+    {value: 'ja', labelKey: 'setting.ja'},
 ]
+
+
+const RoomLangOption = ref([
+    {
+        value: '',
+        label: t('setting.roomNameNot'),
+    },
+    {
+        value: 'zh',
+        label: '中文',
+    },
+    {
+        value: 'en',
+        label: 'English',
+    },
+    {
+        value: 'ja',
+        label: '日本語',
+    },
+    {
+        value: 'ko',
+        label: '한국어',
+    },
+    {
+        value: 'ru',
+        label: 'Русский',
+    },
+    {
+        value: '',
+        label: t('setting.roomNameOther'),
+        disabled: true,
+    },
+])
 
 </script>
 
@@ -680,6 +713,25 @@ const languages = [
                 <el-checkbox-group v-model="store.ShowSkin">
                     <el-checkbox :label="$t('setting.hideSkin')" :value="true"/>
                 </el-checkbox-group>
+            </el-col>
+            <el-col :span="24">
+                <el-select v-model="store.RoomNameLang" :placeholder="$t('setting.roomName')" :reserve-keyword="false"
+                           :teleported="false"
+                           allow-create filterable style="width: 35%">
+                    <el-option
+                        v-for="item in RoomLangOption"
+                        :key="item.value"
+                        :disabled="item.disabled"
+                        :label="item.label"
+                        :value="item.value"
+                    >
+                        <span style="float: left">{{ item.label }}</span>
+                        <span style="float: right; color: var(--el-text-color-secondary); font-size: 13px;">{{
+                                item.value
+                            }} </span>
+                    </el-option>
+
+                </el-select>
             </el-col>
             <el-col :span="24" class="setText">
                 <el-text size="large">{{ $t('setting.joinSetting') }}</el-text>
