@@ -445,6 +445,10 @@ const RoomLangOption = computed(() => [
     {value: '', label: t('setting.roomNameOther'), disabled: true},
 ])
 
+const changeRoomLang = async (): Promise<void> => {
+    await getRoomData()
+}
+
 </script>
 
 <template>
@@ -695,7 +699,8 @@ const RoomLangOption = computed(() => [
             <el-col :span="24">
                 <el-select v-model="store.RoomNameLang" :placeholder="$t('setting.roomName')" :reserve-keyword="false"
                            :teleported="false"
-                           allow-create filterable style="width: auto">
+                           allow-create
+                           filterable style="width: auto" @change="changeRoomLang">
                     <el-option
                         v-for="item in RoomLangOption"
                         :key="item.value"
