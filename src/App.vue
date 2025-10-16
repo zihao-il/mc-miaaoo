@@ -747,6 +747,7 @@ const changeRoomLang = async (): Promise<void> => {
                     v-model="store.Xuid"
                     :placeholder="$t('setting.inputXuid')"
                     maxlength="16"
+                    show-password
                     show-word-limit
                     style="margin-bottom: 1em"
                     type="text"
@@ -754,6 +755,11 @@ const changeRoomLang = async (): Promise<void> => {
                     @input="store.Xuid = store.Xuid.replace(/\D/g, '')"
                 >
                     <template #prepend>XUID</template>
+                    <template #suffix>
+                      <span style="font-size: 12px; color: #999999;">
+                        {{ store.Xuid.length }}/16
+                      </span>
+                    </template>
                 </el-input>
             </el-col>
             <el-col :span="24" class="setText">
