@@ -1,6 +1,8 @@
 {
   "locale.language": "繁體中文",
   "locale.title": "麥塊基岩版線上大廳",
+  "locale.mcBe": "麥塊基岩版",
+  "locale.online": "線上大廳",
   "search.placeholder": "輸入搜尋內容",
   "search.hostName": "房間名稱",
   "search.userName": "使用者名稱",

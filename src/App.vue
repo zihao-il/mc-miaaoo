@@ -82,6 +82,10 @@ const getRoomData = async (): Promise<void> => {
 };
 
 
+const ShowRoomChange = async (): Promise<void> => {
+    await getRoomData()
+}
+
 onMounted(() => {
     setLocale(store.Language)
     getRoomData();
@@ -454,7 +458,7 @@ const changeRoomLang = async (): Promise<void> => {
 <template>
 
     <div class="common-layout">
-        <el-watermark :content="['Minecraft基岩版', '联机大厅']" :font="font" :zIndex="1"
+        <el-watermark :content="[$t('locale.mcBe'), $t('locale.online')]" :font="font" :zIndex="1"
                       style="height: 100%; min-height: 100vh;">
 
             <el-container>
@@ -690,7 +694,8 @@ const changeRoomLang = async (): Promise<void> => {
             </el-col>
             <el-col :span="24">
                 <el-checkbox-group v-model="store.ShowRoom">
-                    <el-checkbox :label="$t('setting.notJoin')" :value="{ id: 0, name: 'unavailable' }"/>
+                    <el-checkbox :label="$t('setting.notJoin')" :value="{ id: 0, name: 'unavailable' }"
+                                 @change="ShowRoomChange"/>
                 </el-checkbox-group>
                 <el-checkbox-group v-model="store.ShowSkin">
                     <el-checkbox :label="$t('setting.hideSkin')" :value="true"/>

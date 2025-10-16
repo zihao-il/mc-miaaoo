@@ -1,6 +1,8 @@
 {
   "locale.language": "日本語",
   "locale.title": "マイクラマルチプレイロビー",
+  "locale.mcBe": "Minecraft Bedrock Edition",
+  "locale.online": "マイクラ",
   "search.placeholder": "ここに入力",
   "search.hostName": "部屋の名前",
   "search.userName": "ユーザー名で検索",
