@@ -18,6 +18,7 @@
   "room.avatar": "头像",
   "room.gamertag": "玩家昵称",
   "room.joinTime": "加入时间",
+  "room.loading": "加载中...",
   "locale.link": "TG频道：",
   "locale.linkText": "MC版本推送频道",
   "setting.title": "设置",

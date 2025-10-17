@@ -18,6 +18,7 @@
   "room.avatar": "Avatar",
   "room.gamertag": "Gamertag",
   "room.joinTime": "Join Time",
+  "room.loading": "Loading...",
   "locale.link": "Telegram Channel: ",
   "locale.linkText": "MC version push channel",
   "setting.title": "Settings",

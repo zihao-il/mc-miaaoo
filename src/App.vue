@@ -468,21 +468,15 @@ const changeRoomLang = async (): Promise<void> => {
     await getRoomData()
 }
 
-const getRoomInfo = async (session: string, roomFrom: string): Promise<JSON> => {
+const showRoomInfo = async (session: string, roomFrom: string): Promise<void> => {
+    dialogPlayerData.room_count = 0
+    dialogPlayerData.room_title = t('room.loading')
+    dialogPlayerData.room_members = []
+    roomInfodialogFormVisible.value = true
     const {data} = await mc_roominfo(session, roomFrom)
     dialogPlayerData.room_count = data.membersInfo.count
     dialogPlayerData.room_title = data.properties.custom.hostName
     dialogPlayerData.room_members = Object.values(data.members)
-    return data
-
-}
-
-const showRoomInfo = (session: string, roomFrom: string): void => {
-    dialogPlayerData.room_count = 0
-    dialogPlayerData.room_title = '加载中...'
-    dialogPlayerData.room_members = []
-    roomInfodialogFormVisible.value = true
-    getRoomInfo(session, roomFrom)
 }
 
 </script>

@@ -18,6 +18,7 @@
   "room.avatar": "頭像",
   "room.gamertag": "玩家暱稱",
   "room.joinTime": "加入時間",
+  "room.loading": "載入中...",
   "locale.link": "Telegram頻道：",
   "locale.linkText": "MC版本推送頻道",
   "setting.title": "設定",
