@@ -44,8 +44,6 @@ export const mc_account = (): Promise<any> => {
         url: '/account',
         method: 'get',
     })
-
-
 }
 
 export const mc_profile = (gt: string): Promise<any> => {
@@ -57,6 +55,15 @@ export const mc_profile = (gt: string): Promise<any> => {
 
         }
     })
+}
 
-
+export const mc_roominfo = (session: string, roomFrom: string): Promise<any> => {
+    return request({
+        url: '/roominfo',
+        method: 'get',
+        params: {
+            session: session,
+            roomfrom: roomFrom,
+        }
+    })
 }

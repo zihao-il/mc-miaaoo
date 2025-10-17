@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {mc_account, mc_join, mc_list, mc_profile} from "./utils/axios";
+import {mc_account, mc_join, mc_list, mc_profile, mc_roominfo} from "./utils/axios";
 import {computed, h, onMounted, reactive, ref, watch} from "vue";
 import {useWindowSize} from '@vueuse/core'
 import {Moon, RefreshRight, Search, Setting, Sunny} from '@element-plus/icons-vue';
@@ -48,8 +48,16 @@ const refJoinSetting = ref<ButtonInstance>();
 const refXuidSetting = ref<ButtonInstance>();
 const {width} = useWindowSize()
 const dialogStyle = computed(() => width.value > 600 ? '600px' : '90%')
+let roomInfodialogFormVisible = ref<boolean>(false);
 
 const accounts = ref<any[]>([]);
+
+const dialogPlayerData = reactive({
+    room_count: 0,
+    room_title: "",
+    room_members: [] as any[],
+});
+
 
 const store = useMCOnlineStore()
 
@@ -460,6 +468,23 @@ const changeRoomLang = async (): Promise<void> => {
     await getRoomData()
 }
 
+const getRoomInfo = async (session: string, roomFrom: string): Promise<JSON> => {
+    const {data} = await mc_roominfo(session, roomFrom)
+    dialogPlayerData.room_count = data.membersInfo.count
+    dialogPlayerData.room_title = data.properties.custom.hostName
+    dialogPlayerData.room_members = Object.values(data.members)
+    return data
+
+}
+
+const showRoomInfo = (session: string, roomFrom: string): void => {
+    dialogPlayerData.room_count = 0
+    dialogPlayerData.room_title = '加载中...'
+    dialogPlayerData.room_members = []
+    roomInfodialogFormVisible.value = true
+    getRoomInfo(session, roomFrom)
+}
+
 </script>
 
 <template>
@@ -524,6 +549,7 @@ const changeRoomLang = async (): Promise<void> => {
                                     <div class="card-header">
 
                                     <span class="gamerName"
+                                          @click="showRoomInfo(d.sessionRef.name,d.roomfrom)"
                                           v-html="parseMinecraftColors(d.customProperties.worldName)"></span>
 
                                     </div>
@@ -664,6 +690,46 @@ const changeRoomLang = async (): Promise<void> => {
                     </template>
                 </el-tour-step>
             </el-tour>
+
+            <el-dialog v-model="roomInfodialogFormVisible" :title="dialogPlayerData.room_title + $t('room.name')"
+                       :width="dialogStyle"
+                       height="300">
+                <el-table :data="dialogPlayerData.room_members" border resizable stripe style="width: 100%;">
+                    <el-table-column :label="$t('room.avatar')" align="center" header-align="center">
+                        <template #default="scope">
+
+                            <el-image
+                                :src="'https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/'+''+scope.row.constants.system.xuid+'/image/head'"
+                                class="headImage"
+                                style="width: 1em;"
+                                @click="showSkin(scope.row.constants.system.xuid)">
+                                <template #error>
+                                </template>
+                            </el-image>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="$t('room.gamertag')" align="center" header-align="center" prop="gamertag"
+                                     sortable>
+                        <template #default="scope">
+                            <span>{{ scope.row.gamertag }}</span>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column :label="$t('room.joinTime')" align="center" header-align="center" prop="joinTime"
+                                     sortable>
+                        <template #default="scope">
+                            <span>{{ changeTime(scope.row.joinTime) }}</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+
+                <template #footer>
+                    <div class="dialog-footer">
+                        <el-tag type="primary">共{{ dialogPlayerData.room_count }}人</el-tag>
+                    </div>
+                </template>
+            </el-dialog>
+
         </el-config-provider>
     </div>
     <el-affix ref="refSettingBtn" :offset="20" class="set-right-bottom" position="bottom">

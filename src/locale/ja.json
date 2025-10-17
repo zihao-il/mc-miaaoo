@@ -14,6 +14,10 @@
   "room.MemberCount": "ルーム人数：",
   "room.gameMode": "ルーム人数：",
   "room.createTime": "ルーム作成日時：",
+  "room.name": " の部屋",
+  "room.avatar": "アバター",
+  "room.gamertag": "プレイヤー名",
+  "room.joinTime": "参加時間",
   "locale.link": "Telegramチャンネル：",
   "locale.linkText": "MCバージョン配信チャンネル",
   "setting.title": "設定",
@@ -86,6 +90,6 @@
   "step.showTitle": "部屋を表示する",
   "step.showText": "このサイトで自分の部屋を表示するには、「部屋に参加する手順②」を完了した後、Minecraftのマップ設定で「マルチプレイ」を有効にし、「フレンドのフレンド」を選択してマップに入ってください。",
   "step.expTitle": "ルーム情報の説明",
-  "step.expText": "アバターをクリックするとホストユーザーのスキン全体を表示できます。名前をクリックすると自動的にクリップボードにコピーされます"
+  "step.expText": "アバターをクリックするとホストユーザーのスキン全体を表示できます。名前をクリックすると自動的にクリップボードにコピーされ、ルーム名をクリックするとルーム情報を確認できます"
 
 }
