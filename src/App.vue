@@ -1,21 +1,30 @@
 <script lang="ts" setup>
-import {mc_list, mc_join, mc_account, mc_profile} from "./utils/axios";
-import {ref, onMounted, h, reactive, watch, computed} from "vue";
+import {mc_account, mc_join, mc_list, mc_profile} from "./utils/axios";
+import {computed, h, onMounted, reactive, ref, watch} from "vue";
 import {useWindowSize} from '@vueuse/core'
-import {RefreshRight, Sunny, Moon, Setting, Search} from '@element-plus/icons-vue';
-import {ElLoading, ElNotification, ElMessage} from "element-plus";
+import {Moon, RefreshRight, Search, Setting, Sunny} from '@element-plus/icons-vue';
+import type {ButtonInstance} from 'element-plus'
+import {ElLoading, ElMessage, ElNotification} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
 import 'element-plus/es/components/notification/style/css'
 import 'element-plus/es/components/message/style/css'
-import type {ButtonInstance} from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
-
-
+import zhTw from 'element-plus/es/locale/lang/zh-cn';
+import en from 'element-plus/es/locale/lang/en'
+import ja from 'element-plus/es/locale/lang/ja'
 import {isDark, toggleDark} from './utils/dark';
 
 import {setLocale} from "./locale";
 
 import {useI18n} from 'vue-i18n';
+import {useMCOnlineStore} from './utils/store'
+
+const elementLocales: Record<string, any> = {
+    zhHans: zhCn,
+    zhHant: zhTw,
+    en,
+    ja,
+}
 
 const {t} = useI18n();
 
@@ -41,8 +50,6 @@ const {width} = useWindowSize()
 const dialogStyle = computed(() => width.value > 600 ? '600px' : '90%')
 
 const accounts = ref<any[]>([]);
-
-import {useMCOnlineStore} from './utils/store'
 
 const store = useMCOnlineStore()
 
@@ -600,7 +607,7 @@ const changeRoomLang = async (): Promise<void> => {
             </el-container>
         </el-watermark>
 
-        <el-config-provider :locale="zhCn">
+        <el-config-provider :locale="elementLocales[store.Language]">
             <el-tour v-model="store.Tour" :z-index="100000" @change="changeTour" @close="store.Tour = false">
                 <el-tour-step :title="$t('step.title')">
                     <template #default>
@@ -651,7 +658,11 @@ const changeRoomLang = async (): Promise<void> => {
                         {{ $t('step.showText') }}
                     </template>
                 </el-tour-step>
-
+                <el-tour-step :title="$t('step.expTitle')" placement="top">
+                    <template #default>
+                        {{ $t('step.expText') }}
+                    </template>
+                </el-tour-step>
             </el-tour>
         </el-config-provider>
     </div>

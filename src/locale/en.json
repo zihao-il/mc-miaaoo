@@ -84,6 +84,8 @@
   "step.joinLastText2": "Ore UI users need (WIN: Game Bar component, Android: FCM push support).",
   "step.joinLastText3": "If push notifications are not supported, please copy the host’s name, add them as a friend, and after joining the room, click Join in your friends list.",
   "step.showTitle": "Show Room",
-  "step.showText": "If you want your room to appear on this website, you need to complete “Step 2: Join a Room,” then enable Multiplayer in your map settings, select ‘Friends of Friends,’ and enter the map."
+  "step.showText": "If you want your room to appear on this website, you need to complete “Step 2: Join a Room,” then enable Multiplayer in your map settings, select ‘Friends of Friends,’ and enter the map.",
+  "step.expTitle": "Room Information Guide",
+  "step.expText": "You can click the avatar to view the host user's full skin, and click the name to automatically copy it to the clipboard"
 
 }
