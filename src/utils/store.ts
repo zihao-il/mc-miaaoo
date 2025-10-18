@@ -6,12 +6,13 @@ export const useMCOnlineStore = defineStore('MCOnline', {
         ShowRoom: [{id: 0, name: "unavailable"}],
         Language: "zhHans",
         Notify: false,
-        ShowSkin: [],
+        ShowSkin: true,
         Xuid: "",
         Tour: true,
         VerifyCode: "",
         Avatar: "",
-        RoomNameLang: ""
+        RoomNameLang: "",
+        HideCrisp: false
     }),
     actions: {},
     persist: {

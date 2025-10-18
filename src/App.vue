@@ -108,6 +108,7 @@ onMounted(() => {
     metaThemeColor();
     dialogNotifyVisible.value = store.Notify
     getAccount()
+    changeHideCrisp()
 });
 
 const gameMode = (mode: string, isHar: boolean): string => {
@@ -348,7 +349,7 @@ const handleNotifyBtn = (): void => {
 }
 
 const showSkin = (xuid: string, type: string = 'btn'): void => {
-    if (type === 'avatar' && store.ShowSkin.length === 0) {
+    if (type === 'avatar' && !store.ShowSkin) {
         return
     }
     imageSkinUrl.value = `https://persona-secondary.franchise.minecraft-services.net/api/v1.0/profile/xuid/${xuid}/image/avatar`;
@@ -356,7 +357,7 @@ const showSkin = (xuid: string, type: string = 'btn'): void => {
 }
 
 const showAvatar = (xuid: string): string => {
-    if (store.ShowSkin.length === 0) {
+    if (!store.ShowSkin) {
         progressHide.value = false
         return '';
     } else {
@@ -495,6 +496,23 @@ const showRoomInfo = async (hostName: string, session: string, roomFrom: string)
                 type: 'error',
             })
     }
+}
+
+const changeHideCrisp = (): void => {
+    if (store.HideCrisp) {
+        const crispStyle = document.createElement('style');
+        crispStyle.innerHTML = `
+        #crisp-chatbox, #crisp-chatbox * {
+            display: none !important;
+        }
+        `;
+        document.head.appendChild(crispStyle);
+    }
+}
+
+const resetGuide = (): void => {
+    store.Tour = true
+    location.reload()
 }
 
 </script>
@@ -705,6 +723,7 @@ const showRoomInfo = async (hostName: string, session: string, roomFrom: string)
 
             <el-dialog v-model="roomInfodialogFormVisible" :title="dialogPlayerData.room_title + $t('room.name')"
                        :width="dialogStyle"
+                       :z-index="999999"
                        height="300">
                 <el-table :data="dialogPlayerData.room_members" border resizable stripe style="width: 100%;">
                     <el-table-column :label="$t('room.avatar')" align="center" header-align="center">
@@ -740,7 +759,11 @@ const showRoomInfo = async (hostName: string, session: string, roomFrom: string)
 
                 <template #footer>
                     <div class="dialog-footer">
-                        <el-tag type="primary">共{{ dialogPlayerData.room_count }}人</el-tag>
+                        <el-tag style="float: left" type="primary">共{{ dialogPlayerData.room_count }}人</el-tag>
+                        <el-button size="small" type="primary" @click="roomInfodialogFormVisible = false">
+                            {{ $t('setting.close') }}
+                        </el-button>
+
                     </div>
                 </template>
             </el-dialog>
@@ -789,9 +812,8 @@ const showRoomInfo = async (hostName: string, session: string, roomFrom: string)
                     <el-checkbox :label="$t('setting.notJoin')" :value="{ id: 0, name: 'unavailable' }"
                                  @change="ShowRoomChange"/>
                 </el-checkbox-group>
-                <el-checkbox-group v-model="store.ShowSkin">
-                    <el-checkbox :label="$t('setting.hideSkin')" :value="true"/>
-                </el-checkbox-group>
+                <el-checkbox v-model="store.ShowSkin" :label="$t('setting.hideSkin')" :value="true"/>
+
             </el-col>
             <el-col :span="24">
                 <el-select v-model="store.RoomNameLang" :placeholder="$t('setting.roomName')" :reserve-keyword="false"
@@ -858,6 +880,16 @@ const showRoomInfo = async (hostName: string, session: string, roomFrom: string)
                       </span>
                     </template>
                 </el-input>
+            </el-col>
+            <el-col :span="24" class="setText">
+                <el-text size="large">{{ $t('setting.other') }}</el-text>
+            </el-col>
+            <el-col :span="24">
+                <el-checkbox v-model="store.HideCrisp" :label="$t('setting.hideCrisp')" :value="false"
+                             @change="changeHideCrisp"/>
+            </el-col>
+            <el-col :span="24">
+                <el-check-tag checked @click="resetGuide">重置新手引导</el-check-tag>
             </el-col>
             <el-col :span="24" class="setText">
                 <el-text size="large">{{ $t('setting.language') }}
