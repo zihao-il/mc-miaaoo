@@ -18,7 +18,8 @@
   "room.avatar": "Avatar",
   "room.gamertag": "Gamertag",
   "room.joinTime": "Join Time",
-  "room.null": "The room does not exist or requests are too frequent!",
+  "room.null": "The room does not exist!",
+  "room.often": "Requests are too frequent!",
   "locale.link": "Telegram Channel: ",
   "locale.linkText": "MC version push channel",
   "setting.title": "Settings",
@@ -92,5 +93,4 @@
   "step.showText": "If you want your room to appear on this website, you need to complete “Step 2: Join a Room,” then enable Multiplayer in your map settings, select ‘Friends of Friends,’ and enter the map.",
   "step.expTitle": "Room Information Guide",
   "step.expText": "You can click the avatar to view the host user's full skin, click the name to automatically copy it to the clipboard, and click the room name to view room information"
-
 }

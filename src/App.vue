@@ -473,17 +473,26 @@ const showRoomInfo = async (hostName: string, session: string, roomFrom: string)
     dialogPlayerData.room_title = hostName
     dialogPlayerData.room_members = []
     roomInfodialogFormVisible.value = true
-    const {data} = await mc_roominfo(session, roomFrom)
-    if (!data.membersInfo || data.status === "403") {
+    try {
+        const {data} = await mc_roominfo(session, roomFrom)
+        if (!data.membersInfo) {
+             ElMessage({
+                message: t('room.null'),
+                type: 'error',
+            })
+            return
+        }
+        dialogPlayerData.room_count = data.membersInfo.count
+        dialogPlayerData.room_title = data.properties.custom.hostName
+        dialogPlayerData.room_members = Object.values(data.members)
+    } catch (e) {
         ElMessage({
-            message: t('room.null'),
+            message: t('room.often'),
             type: 'error',
         })
-        return
     }
-    dialogPlayerData.room_count = data.membersInfo.count
-    dialogPlayerData.room_title = data.properties.custom.hostName
-    dialogPlayerData.room_members = Object.values(data.members)
+
+
 }
 
 </script>

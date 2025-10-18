@@ -18,7 +18,8 @@
   "room.avatar": "頭像",
   "room.gamertag": "玩家暱稱",
   "room.joinTime": "加入時間",
-  "room.null": "房間不存在或請求過於頻繁！",
+  "room.null": "房間不存在！",
+  "room.often": "請求過於頻繁！",
   "locale.link": "Telegram頻道：",
   "locale.linkText": "MC版本推送頻道",
   "setting.title": "設定",
@@ -92,5 +93,4 @@
   "step.showText": "若你希望在此網站顯示你的房間，需要先完成「加入房間第二步」，然後在地圖設定中的多人遊戲啟用多人遊戲並選擇「好友的好友」，接著進入地圖即可。",
   "step.expTitle": "房間資訊說明",
   "step.expText": "你可以點擊頭像以取得主機使用者的完整皮膚造型，點擊名字即可自動複製到剪貼簿，點擊房間名稱可以查看房間資訊"
-
 }
