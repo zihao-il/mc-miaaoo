@@ -18,7 +18,7 @@
   "room.avatar": "头像",
   "room.gamertag": "玩家昵称",
   "room.joinTime": "加入时间",
-  "room.loading": "加载中...",
+  "room.null": "房间不存在或请求频繁！",
   "locale.link": "TG频道：",
   "locale.linkText": "MC版本推送频道",
   "setting.title": "设置",
@@ -92,5 +92,4 @@
   "step.showText": "如果你需要在此网站中显示你的房间你需要完成“加入房间第二步”后在地图设置中的多人游戏中启用多人游戏并选择好友的好友后进入地图即可。",
   "step.expTitle": "房间信息说明",
   "step.expText": "你可以点击头像获取主机用户的完整皮肤形象，点击名字即可自动复制到剪切板，点击房间名可以查看房间信息"
-
 }

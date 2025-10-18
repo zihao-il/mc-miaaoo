@@ -18,7 +18,7 @@
   "room.avatar": "Avatar",
   "room.gamertag": "Gamertag",
   "room.joinTime": "Join Time",
-  "room.loading": "Loading...",
+  "room.null": "The room does not exist or requests are too frequent!",
   "locale.link": "Telegram Channel: ",
   "locale.linkText": "MC version push channel",
   "setting.title": "Settings",

@@ -468,12 +468,19 @@ const changeRoomLang = async (): Promise<void> => {
     await getRoomData()
 }
 
-const showRoomInfo = async (session: string, roomFrom: string): Promise<void> => {
+const showRoomInfo = async (hostName: string, session: string, roomFrom: string): Promise<void> => {
     dialogPlayerData.room_count = 0
-    dialogPlayerData.room_title = t('room.loading')
+    dialogPlayerData.room_title = hostName
     dialogPlayerData.room_members = []
     roomInfodialogFormVisible.value = true
     const {data} = await mc_roominfo(session, roomFrom)
+    if (!data.membersInfo || data.status === "403") {
+        ElMessage({
+            message: t('room.null'),
+            type: 'error',
+        })
+        return
+    }
     dialogPlayerData.room_count = data.membersInfo.count
     dialogPlayerData.room_title = data.properties.custom.hostName
     dialogPlayerData.room_members = Object.values(data.members)
@@ -543,7 +550,7 @@ const showRoomInfo = async (session: string, roomFrom: string): Promise<void> =>
                                     <div class="card-header">
 
                                     <span class="gamerName"
-                                          @click="showRoomInfo(d.sessionRef.name,d.roomfrom)"
+                                          @click="showRoomInfo(d.customProperties.hostName, d.sessionRef.name,d.roomfrom)"
                                           v-html="parseMinecraftColors(d.customProperties.worldName)"></span>
 
                                     </div>
