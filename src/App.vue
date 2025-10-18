@@ -49,6 +49,7 @@ const refXuidSetting = ref<ButtonInstance>();
 const {width} = useWindowSize()
 const dialogStyle = computed(() => width.value > 600 ? '600px' : '90%')
 let roomInfodialogFormVisible = ref<boolean>(false);
+let roomTableEmpty = ref<string>('');
 
 const accounts = ref<any[]>([]);
 
@@ -469,6 +470,7 @@ const changeRoomLang = async (): Promise<void> => {
 }
 
 const showRoomInfo = async (hostName: string, session: string, roomFrom: string): Promise<void> => {
+    roomTableEmpty.value = t('locale.loading')
     dialogPlayerData.room_count = 0
     dialogPlayerData.room_title = hostName
     dialogPlayerData.room_members = []
@@ -476,7 +478,8 @@ const showRoomInfo = async (hostName: string, session: string, roomFrom: string)
     try {
         const {data} = await mc_roominfo(session, roomFrom)
         if (!data.membersInfo) {
-             ElMessage({
+            roomTableEmpty.value = t('room.null')
+            ElMessage({
                 message: t('room.null'),
                 type: 'error',
             })
@@ -486,13 +489,12 @@ const showRoomInfo = async (hostName: string, session: string, roomFrom: string)
         dialogPlayerData.room_title = data.properties.custom.hostName
         dialogPlayerData.room_members = Object.values(data.members)
     } catch (e) {
-        ElMessage({
-            message: t('room.often'),
-            type: 'error',
-        })
+        roomTableEmpty.value = t('room.often'),
+            ElMessage({
+                message: t('room.often'),
+                type: 'error',
+            })
     }
-
-
 }
 
 </script>
@@ -731,6 +733,9 @@ const showRoomInfo = async (hostName: string, session: string, roomFrom: string)
                             <span>{{ changeTime(scope.row.joinTime) }}</span>
                         </template>
                     </el-table-column>
+                    <template #empty>
+                        {{ roomTableEmpty }}
+                    </template>
                 </el-table>
 
                 <template #footer>
