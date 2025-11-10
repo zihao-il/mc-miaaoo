@@ -3,6 +3,7 @@ import type {AxiosInstance} from 'axios'
 
 const request: AxiosInstance = axios.create({
     baseURL: 'https://api.miaaoo.com/',
+    // baseURL: '/api',
     timeout: 30000,
     headers: {
         'Content-Type': 'application/json',
