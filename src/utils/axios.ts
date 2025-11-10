@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type {AxiosInstance} from 'axios'
 
-const isNetlify = import.meta.env.VITE_NETLIFY == true
+const isNetlify = import.meta.env.VITE_NETLIFY == 'true'
 
 const request: AxiosInstance = axios.create({
     baseURL: isNetlify ? '/api' : 'https://api.miaaoo.com/',
