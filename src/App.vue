@@ -704,9 +704,7 @@ const resetGuide = (): void => {
                 </el-tour-step>
                 <el-tour-step :title="$t('step.joinLastTitle')" placement="top">
                     <template #default>
-                        {{ $t('step.joinLastText1') }}<br>{{ $t('step.joinLastText2') }}<br>{{
-                            $t('step.joinLastText3')
-                        }}
+                        {{ $t('step.joinLastText') }}
                     </template>
                 </el-tour-step>
                 <el-tour-step :title="$t('step.showTitle')" placement="top">

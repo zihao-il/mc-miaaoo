@@ -11,14 +11,11 @@ const request: AxiosInstance = axios.create({
     }
 })
 
-export const mc_list = (lang: string): Promise<any> => {
+export const mc_list = (lang?: string): Promise<any> => {
     return request({
         url: '/list',
         method: 'get',
-        params: {
-            lang: lang,
-
-        }
+        ...(lang ? {params: {lang}} : {})
     })
 }
 
