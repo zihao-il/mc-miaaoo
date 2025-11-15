@@ -48,6 +48,8 @@
   "setting.close": "閉じる",
   "setting.other": "その他の設定",
   "setting.hideCrisp": "左下の丸いアイコンを非表示にする",
+  "setting.resetGuide": "チュートリアルをリセット",
+  "setting.setBgImage": "背景画像を設定",
   "locale.loading": "NOW LOADING",
   "mode.survival": "生存",
   "mode.hardcore": "ハードコア",

@@ -48,6 +48,8 @@
   "setting.close": "关闭",
   "setting.other": "其他设置",
   "setting.hideCrisp": "隐藏左下角圆球",
+  "setting.resetGuide": "重置新手引导",
+  "setting.setBgImage": "设置背景图",
   "locale.loading": "加载中...",
   "mode.survival": "生存模式",
   "mode.hardcore": "极限模式",

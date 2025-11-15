@@ -1,4 +1,5 @@
 import {defineStore} from 'pinia'
+import type { UploadUserFile } from 'element-plus'
 
 export const useMCOnlineStore = defineStore('MCOnline', {
     state: () => ({
@@ -12,7 +13,9 @@ export const useMCOnlineStore = defineStore('MCOnline', {
         VerifyCode: "",
         Avatar: "",
         RoomNameLang: "",
-        HideCrisp: false
+        HideCrisp: false,
+        BgImage: [] as UploadUserFile[],
+        BgFilter: 0,
     }),
     actions: {},
     persist: {

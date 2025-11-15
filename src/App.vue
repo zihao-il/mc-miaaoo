@@ -2,9 +2,9 @@
 import {mc_account, mc_join, mc_list, mc_profile, mc_roominfo} from "./utils/axios";
 import {computed, h, onMounted, reactive, ref, watch} from "vue";
 import {useWindowSize} from '@vueuse/core'
-import {Moon, RefreshRight, Search, Setting, Sunny} from '@element-plus/icons-vue';
-import type {ButtonInstance} from 'element-plus'
-import {ElLoading, ElMessage, ElNotification} from "element-plus";
+import {Delete, Moon, Plus, RefreshRight, Search, Setting, StarFilled, Sunny} from '@element-plus/icons-vue';
+import type {ButtonInstance, UploadFile, UploadProps, UploadUserFile, UploadInstance, UploadRawFile} from 'element-plus'
+import {ElLoading, ElMessage, ElNotification, genFileId} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
 import 'element-plus/es/components/notification/style/css'
 import 'element-plus/es/components/message/style/css'
@@ -50,6 +50,8 @@ const {width} = useWindowSize()
 const dialogStyle = computed(() => width.value > 600 ? '600px' : '90%')
 let roomInfodialogFormVisible = ref<boolean>(false);
 let roomTableEmpty = ref<string>('');
+const fileList = ref<UploadUserFile[]>([])
+const bgImageRef = ref<UploadInstance>()
 
 const accounts = ref<any[]>([]);
 
@@ -108,7 +110,10 @@ onMounted(() => {
     metaThemeColor();
     dialogNotifyVisible.value = store.Notify
     getAccount()
-    changeHideCrisp()
+    if (store.HideCrisp) {
+        changeHideCrisp()
+    }
+    fileList.value = store.BgImage
 });
 
 const gameMode = (mode: string, isHar: boolean): string => {
@@ -515,11 +520,50 @@ const resetGuide = (): void => {
     location.reload()
 }
 
+
+const bgImageRemove = (_file: UploadFile) => {
+    bgImageRef.value!.clearFiles()
+    fileList.value = store.BgImage = []
+}
+
+const bgImageChange = (file: UploadFile) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+        const url = e.target?.result as string
+        file.url = url
+        const newItem: UploadUserFile = {
+            name: file.name!,
+            url
+        }
+        fileList.value = [newItem]
+        store.BgImage = [newItem]
+
+    }
+    reader.readAsDataURL(file.raw!)
+}
+
+
+const bgImageExceed: UploadProps['onExceed'] = (files) => {
+    bgImageRef.value!.clearFiles()
+    const file = files[0] as UploadRawFile
+    file.uid = genFileId()
+    bgImageRef.value!.handleStart(file)
+}
+
+const bgStyle = computed(() => {
+    return store.BgImage.length > 0
+        ? {backgroundColor: 'rgba(0,0,0,0)'}
+        : {}
+})
+
 </script>
 
 <template>
 
-    <div class="common-layout">
+    <div :style="{
+      backgroundImage: store.BgImage.length > 0 ? `url(${store.BgImage[0]['url']})` : 'none',
+        filter: `blur(${store.BgFilter}px)`
+    }" class="common-layout">
         <el-watermark :content="[$t('locale.mcBe'), $t('locale.online')]" :font="font" :zIndex="1"
                       style="height: 100%; min-height: 100vh;">
 
@@ -531,6 +575,7 @@ const resetGuide = (): void => {
                             <el-input
                                 v-model="searchContent"
                                 :placeholder="$t('search.placeholder')"
+                                :style="store.BgImage.length >0 ? {'--el-fill-color-light' : 'rgba(0,0,0,0)','--el-input-bg-color' : 'rgba(0,0,0,0)' } : {}"
                                 clearable
                                 style="min-width: auto"
                                 @clear="clearBtn()"
@@ -549,7 +594,7 @@ const resetGuide = (): void => {
                         </el-col>
                         <el-col class="room-total">
                             {{ $t('total.all') }}
-                            <el-tag>{{ room_count }}</el-tag>
+                            <el-tag :style="bgStyle">{{ room_count }}</el-tag>
                             {{ $t('total.room') }}
                         </el-col>
                         <el-col>
@@ -574,7 +619,9 @@ const resetGuide = (): void => {
                         <div class="card-container">
 
 
-                            <el-card v-for="d in room_data" class="centered-card" style="z-index: 10 !important;">
+                            <el-card v-for="d in room_data"
+                                     :style="bgStyle"
+                                     class="centered-card" style="z-index: 10 !important;">
                                 <template #header>
                                     <div class="card-header">
 
@@ -624,9 +671,10 @@ const resetGuide = (): void => {
                                     </el-progress>
                                 </template>
                                 <template #footer>
-                                    <el-tag type="primary">{{ d.customProperties.version }}</el-tag>
+                                    <el-tag :style="bgStyle" type="primary">{{ d.customProperties.version }}</el-tag>
                                     <el-button
                                         :disabled="isBtnDisabled(d.customProperties.MemberCount, d.customProperties.MaxMemberCount, d.customProperties.BroadcastSetting) || clickedButtons.has(d.id)"
+                                        :style="bgStyle"
                                         class="check-btn" size="small"
                                         type="primary"
                                         @click="wsJoin(d.roomfrom,d.id,d.sessionRef.name)">
@@ -642,6 +690,12 @@ const resetGuide = (): void => {
 
                 </el-main>
                 <el-footer>
+
+                    <el-divider>
+                        <el-icon>
+                            <star-filled/>
+                        </el-icon>
+                    </el-divider>
                     <div class="footer">
 
                         {{ $t('locale.link') }}
@@ -887,8 +941,35 @@ const resetGuide = (): void => {
                              @change="changeHideCrisp"/>
             </el-col>
             <el-col :span="24">
-                <el-check-tag checked @click="resetGuide">重置新手引导</el-check-tag>
+                <el-check-tag checked @click="resetGuide">{{ $t('setting.resetGuide') }}</el-check-tag>
             </el-col>
+
+            <el-col :span="24">
+                <el-upload ref="bgImageRef" v-model:file-list="fileList" :auto-upload="false" :limit="1"
+                           :on-change="bgImageChange" :on-exceed="bgImageExceed" accept="image/*"
+                           list-type="picture-card">
+                    {{ $t('setting.setBgImage') }}
+                    <el-icon>
+                        <Plus/>
+                    </el-icon>
+
+                    <template #file="{ file }">
+                        <div>
+                            <img :src="file.url" alt="" class="el-upload-list__item-thumbnail"/>
+                            <span class="el-upload-list__item-actions">
+
+                              <span
+                                  class="el-upload-list__item-delete"
+                                  @click="bgImageRemove(file)"
+                              >
+                                <el-icon><Delete/></el-icon>
+                              </span>
+                            </span>
+                        </div>
+                    </template>
+                </el-upload>
+            </el-col>
+
             <el-col :span="24" class="setText">
                 <el-text size="large">{{ $t('setting.language') }}
                     <el-link href="https://github.com/zihao-il/mc-miaaoo/tree/main/src/locale" target="_blank"
@@ -1054,6 +1135,12 @@ const resetGuide = (): void => {
 .footer {
     padding-bottom: 1em;
     text-align: center;
+
+}
+
+.el-footer {
+    height: 0%;
+    --el-footer-height: 1;
 }
 
 .affix-right-bottom {
@@ -1136,4 +1223,13 @@ const resetGuide = (): void => {
     opacity: 0.4;
 }
 
+:deep(.el-image__error) {
+    display: none;
+}
+
+
+.common-layout {
+    height: 100%;
+    background-size: 100% auto;
+}
 </style>
