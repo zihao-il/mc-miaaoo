@@ -974,9 +974,9 @@ const bgStyle = computed(() => {
                 </el-upload>
             </el-col>
 
-            <el-col :span="24">
-                    <span class="filter-text">{{ $t('setting.BgImageFilter') }}</span>
-                    <el-slider v-model="store.BgFilter" :max="50" :min="0"/>
+            <el-col :span="24" style="margin-top: 0.5em">
+                <span class="filter-text">{{ $t('setting.BgImageFilter') }}</span>
+                <el-slider v-model="store.BgFilter" :max="50" :min="0" show-tooltip/>
             </el-col>
 
             <el-col :span="24" class="setText">
