@@ -50,6 +50,7 @@
   "setting.hideCrisp": "Hide Bottom Left Bubble",
   "setting.resetGuide": "Reset Tutorial",
   "setting.setBgImage": "Set Background Image",
+  "setting.BgImageFilter": "Background Blur:",
   "locale.loading": "Loading...",
   "mode.survival": "Survival Mode",
   "mode.hardcore": "Hardcore Mode",

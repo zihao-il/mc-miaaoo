@@ -560,10 +560,11 @@ const bgStyle = computed(() => {
 
 <template>
 
-    <div :style="{
+    <div class="common-layout">
+        <div :style="{
       backgroundImage: store.BgImage.length > 0 ? `url(${store.BgImage[0]['url']})` : 'none',
-        filter: `blur(${store.BgFilter}px)`
-    }" class="common-layout">
+      filter: `blur(${store.BgFilter}px)`
+    }" class="bg-layer"></div>
         <el-watermark :content="[$t('locale.mcBe'), $t('locale.online')]" :font="font" :zIndex="1"
                       style="height: 100%; min-height: 100vh;">
 
@@ -941,7 +942,10 @@ const bgStyle = computed(() => {
                              @change="changeHideCrisp"/>
             </el-col>
             <el-col :span="24">
-                <el-check-tag checked @click="resetGuide">{{ $t('setting.resetGuide') }}</el-check-tag>
+                <el-check-tag checked style="margin-bottom: 0.5em" @click="resetGuide">{{
+                        $t('setting.resetGuide')
+                    }}
+                </el-check-tag>
             </el-col>
 
             <el-col :span="24">
@@ -968,6 +972,11 @@ const bgStyle = computed(() => {
                         </div>
                     </template>
                 </el-upload>
+            </el-col>
+
+            <el-col :span="24">
+                    <span class="filter-text">{{ $t('setting.BgImageFilter') }}</span>
+                    <el-slider v-model="store.BgFilter" :max="50" :min="0"/>
             </el-col>
 
             <el-col :span="24" class="setText">
@@ -1229,7 +1238,16 @@ const bgStyle = computed(() => {
 
 
 .common-layout {
+    position: relative;
+
+}
+
+.bg-layer {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
     height: 100%;
     background-size: 100% auto;
 }
+
 </style>
