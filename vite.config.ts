@@ -10,13 +10,13 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 export default defineConfig({
     plugins: [vue(),
         VueI18nPlugin({
+            runtimeOnly: true,
+            compositionOnly: true,
             include: './src/locales/**'
         }),
         compression({
             algorithms: [
-                'gzip',
-                'brotliCompress',
-                defineAlgorithm('deflate', {level: 9})
+                defineAlgorithm('gzip', {level: 9})
             ]
         }),
         AutoImport({
