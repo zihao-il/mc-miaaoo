@@ -712,7 +712,8 @@ const bgStyle = computed(() => {
                         去除Ore UI版本
                         <el-link href="https://openlist.endyun.ltd/"
                                  type="primary">点我下载
-                        </el-link>                        <br>
+                        </el-link>
+                        <br>
                         反代备用站
                         <el-link href="https://miaaoo.netlify.app/"
                                  type="primary">无法显示房间用这个
