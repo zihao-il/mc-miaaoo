@@ -1,8 +1,18 @@
 <script lang="ts" setup>
 import {mc_account, mc_join, mc_list, mc_profile, mc_roominfo} from "./utils/axios";
-import {computed, h, onMounted, reactive, ref, watch} from "vue";
+import {computed, h, onMounted, reactive, ref, watch, nextTick} from "vue";
 import {useWindowSize} from '@vueuse/core'
-import {Delete, Moon, Plus, RefreshRight, Search, Setting, StarFilled, Sunny} from '@element-plus/icons-vue';
+import {
+    Delete,
+    Moon,
+    Plus,
+    RefreshRight,
+    Search,
+    Setting,
+    StarFilled,
+    Sunny,
+    ChatLineRound
+} from '@element-plus/icons-vue';
 import type {ButtonInstance, UploadFile, UploadProps, UploadUserFile, UploadInstance, UploadRawFile} from 'element-plus'
 import {ElLoading, ElMessage, ElNotification, genFileId} from "element-plus";
 import 'element-plus/es/components/loading/style/css'
@@ -52,6 +62,9 @@ let roomInfodialogFormVisible = ref<boolean>(false);
 let roomTableEmpty = ref<string>('');
 const fileList = ref<UploadUserFile[]>([])
 const bgImageRef = ref<UploadInstance>()
+const dialogAiVisible = ref<boolean>(false);
+const sendLoading = ref<boolean>(false);
+const userInput = ref<string>("");
 
 const accounts = ref<any[]>([]);
 
@@ -556,6 +569,101 @@ const bgStyle = computed(() => {
         : {}
 })
 
+
+
+
+const messages = ref<{ role: "user" | "ai"; content: string }[]>([]);
+const chatBox = ref<HTMLDivElement>();
+
+const scrollToBottom = () => {
+    nextTick(() => {
+        if (chatBox.value) {
+            chatBox.value.scrollTop = chatBox.value.scrollHeight;
+        }
+    });
+};
+
+
+const mc_ai_sse = (query: string) => {
+    const url = "https://api.dify.ai/v1/chat-messages";
+
+    return fetch(url, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer app-7sVC7DkpvC8hIh0o8DeyA5d6`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            inputs: {},
+            query,
+            response_mode: "streaming",
+            user: store.Xuid,
+            files: [],
+        }),
+    });
+};
+
+
+const handleSend = async () => {
+    if (!userInput.value.trim()) return;
+    const question = userInput.value;
+    userInput.value = "";
+
+    messages.value.push({
+        role: "user",
+        content: question,
+    });
+    scrollToBottom();
+
+    sendLoading.value = true;
+
+
+    const response = await mc_ai_sse(question);
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder("utf-8");
+
+    let aiText = "";
+    let aiAdded = false;
+
+    while (true) {
+        const {value, done} = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split("\n");
+
+        for (const line of lines) {
+            if (line.startsWith("data:")) {
+                const jsonStr = line.replace("data: ", "").trim();
+                if (!jsonStr || jsonStr === "[DONE]") continue;
+
+                try {
+                    const data = JSON.parse(jsonStr);
+
+
+                    if (data.event === "message" && data.answer !== undefined) {
+                        aiText += data.answer;
+                        if (!aiAdded) {
+                            messages.value.push({
+                                role: "ai",
+                                content: aiText,
+                            });
+                            aiAdded = true;
+                        } else {
+                            messages.value[messages.value.length - 1].content = aiText;
+                        }
+
+                        scrollToBottom();
+                    }
+                } catch (err) {
+                    console.warn("解析失败：", jsonStr);
+                }
+            }
+        }
+    }
+
+    sendLoading.value = false;
+};
 </script>
 
 <template>
@@ -828,6 +936,12 @@ const bgStyle = computed(() => {
 
         </el-config-provider>
     </div>
+
+<!--    <el-affix :offset="20" class="ai-right-bottom" position="bottom">-->
+<!--        <el-button :icon="ChatLineRound" circle size="large" type="primary" @click="dialogAiVisible=true"></el-button>-->
+
+<!--    </el-affix>-->
+
     <el-affix ref="refSettingBtn" :offset="20" class="set-right-bottom" position="bottom">
         <el-button :icon="Setting" circle size="large" type="primary" @click="dialogFormVisible=true"></el-button>
 
@@ -1060,6 +1174,54 @@ const bgStyle = computed(() => {
         </template>
     </el-dialog>
 
+    <el-dialog
+        v-model="dialogAiVisible"
+        :width="dialogStyle"
+        :close-on-click-modal="false"
+        class="ai-dialog"
+        title="AI 助手"
+    >
+        <div class="chat-container">
+            <div ref="chatBox" class="chat-box">
+                <div
+                    v-for="(msg, index) in messages"
+                    :key="index"
+                    :class="['msg', msg.role]"
+                >
+
+                    <template v-if="msg.role === 'ai'">
+                        <img alt="AI 头像" class="avatar" src="/favicon.ico"/>
+                        <div class="bubble">{{ msg.content }}</div>
+                    </template>
+
+                    <template v-else>
+                        <div class="bubble">{{ msg.content }}</div>
+                        <img :src="store.Avatar" alt="用户头像" class="avatar"/>
+                    </template>
+                </div>
+            </div>
+
+            <div class="input-bar">
+                <el-input
+                    v-model="userInput"
+                    :rows="2"
+                    placeholder="请输入你的问题..."
+                    resize="none"
+                    type="textarea"
+                    @keyup.enter="handleSend"
+                />
+                <el-button
+                    :loading="sendLoading"
+                    class="send-btn"
+                    type="primary"
+                    @click="handleSend"
+                >
+                    发送
+                </el-button>
+            </div>
+        </div>
+    </el-dialog>
+
     <el-image-viewer
         v-if="isSkinVisible"
         :hide-on-click-modal="true"
@@ -1255,4 +1417,71 @@ const bgStyle = computed(() => {
     background-size: 100% auto;
 }
 
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+}
+
+.chat-box {
+    overflow-y: auto;
+    flex: 1;
+    padding: 0.25em;
+
+}
+
+.msg {
+    display: flex;
+    align-items: flex-end;
+    margin: 12px 0;
+}
+
+.msg.ai {
+    justify-content: flex-start;
+}
+
+.msg.user {
+    justify-content: flex-end;
+}
+
+.bubble {
+    max-width: 70%;
+    padding: 10px 14px;
+    word-break: break-word;
+    border-radius: 14px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    margin: 0 8px;
+    border-radius: 50%;
+}
+
+.msg.user .bubble {
+    color: var(--el-text-color-primary);
+    border-bottom-right-radius: 4px;
+    background: var(--el-color-primary-light-3);
+}
+
+
+.msg.ai .bubble {
+    color: var(--el-text-color-primary);
+    border-bottom-left-radius: 4px;
+    background: var(--el-color-info-light-3);
+}
+
+
+.input-bar {
+    display: flex;
+    align-items: center;
+    padding: 0.9em 0.5em 0.5em;
+    border-top: 1px solid var(--el-border-color);
+
+}
+
+.send-btn {
+    margin-left: 0.85em;
+}
 </style>
