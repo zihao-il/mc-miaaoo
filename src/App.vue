@@ -24,6 +24,7 @@ import zhTw from 'element-plus/es/locale/lang/zh-cn';
 import en from 'element-plus/es/locale/lang/en'
 import ja from 'element-plus/es/locale/lang/ja'
 import {isDark, toggleDark} from './utils/dark';
+import MarkdownIt from "markdown-it";
 
 import {setLocale} from "./locale";
 
@@ -77,6 +78,10 @@ const dialogPlayerData = reactive({
 
 
 const store = useMCOnlineStore()
+
+const md = new MarkdownIt();
+
+const renderMarkdown = (text: string) => md.render(text);
 
 const getRoomData = async (): Promise<void> => {
     const loading = ElLoading.service({
@@ -1192,7 +1197,7 @@ const handleSend = async () => {
 
                     <template v-if="msg.role === 'ai'">
                         <el-avatar class="ai-avatar" size="default" src="/favicon.ico"/>
-                        <div class="bubble">{{ msg.content }}</div>
+                        <div class="bubble" v-html="renderMarkdown(msg.content)"></div>
                     </template>
 
                     <template v-else>
