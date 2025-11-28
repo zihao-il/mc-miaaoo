@@ -1496,4 +1496,13 @@ const handleSend = async () => {
 .send-btn {
     margin-left: 0.85em;
 }
+
+.bubble ol, .bubble ul {
+    padding-left: 1.5em !important;
+}
+
+.bubble hr {
+    margin: 0.5em 0 !important;
+}
+
 </style>
