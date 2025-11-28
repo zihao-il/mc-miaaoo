@@ -570,8 +570,6 @@ const bgStyle = computed(() => {
 })
 
 
-
-
 const messages = ref<{ role: "user" | "ai"; content: string }[]>([]);
 const chatBox = ref<HTMLDivElement>();
 
@@ -937,17 +935,17 @@ const handleSend = async () => {
         </el-config-provider>
     </div>
 
-<!--    <el-affix :offset="20" class="ai-right-bottom" position="bottom">-->
-<!--        <el-button :icon="ChatLineRound" circle size="large" type="primary" @click="dialogAiVisible=true"></el-button>-->
+    <el-affix v-if="store.Avatar" :offset="20" class="right-bottom ai-right-bottom" position="bottom">
+        <el-button :icon="ChatLineRound" circle size="large" type="primary" @click="dialogAiVisible=true"></el-button>
 
-<!--    </el-affix>-->
+    </el-affix>
 
-    <el-affix ref="refSettingBtn" :offset="20" class="set-right-bottom" position="bottom">
+    <el-affix ref="refSettingBtn" :offset="20" class="right-bottom set-right-bottom" position="bottom">
         <el-button :icon="Setting" circle size="large" type="primary" @click="dialogFormVisible=true"></el-button>
 
     </el-affix>
 
-    <el-affix :offset="20" class="color-right-bottom" position="bottom">
+    <el-affix :offset="20" class="right-bottom color-right-bottom" position="bottom">
         <el-button circle size="large" type="primary" @click="toggleDarkMode()">
             <el-icon style="cursor: pointer;">
                 <template v-if="isDark">
@@ -961,10 +959,11 @@ const handleSend = async () => {
 
     </el-affix>
 
-    <el-affix :offset="20" class="affix-right-bottom" position="bottom">
+    <el-affix :offset="20" class="right-bottom affix-right-bottom" position="bottom">
         <el-button :disabled="isDisabled" :icon="RefreshRight" circle size="large" type="primary"
                    @click="handleClick()"/>
     </el-affix>
+
     <el-backtop :bottom="80" :right="80" style="z-index: 10 !important;"/>
     <el-dialog v-model="dialogFormVisible" :title="$t('setting.title')" :width="dialogStyle"
                :z-index="99999" height="300">
@@ -1176,10 +1175,11 @@ const handleSend = async () => {
 
     <el-dialog
         v-model="dialogAiVisible"
-        :width="dialogStyle"
         :close-on-click-modal="false"
+        :width="dialogStyle"
         class="ai-dialog"
-        title="AI 助手"
+        :z-index="999999"
+        title="AI 小助手"
     >
         <div class="chat-container">
             <div ref="chatBox" class="chat-box">
@@ -1319,26 +1319,29 @@ const handleSend = async () => {
     --el-footer-height: 1;
 }
 
-.affix-right-bottom {
+.right-bottom {
     position: fixed;
     z-index: 99999;
     right: 20px;
+}
+
+.affix-right-bottom {
     bottom: 20px;
 }
 
 .color-right-bottom {
-    position: fixed;
-    z-index: 99999;
-    right: 20px;
+
     bottom: 80px;
 }
 
 .set-right-bottom {
-    position: fixed;
-    z-index: 99999;
-    right: 20px;
+
     bottom: 140px;
 
+}
+
+.ai-right-bottom {
+    bottom: 200px;
 }
 
 .setText {
@@ -1421,6 +1424,8 @@ const handleSend = async () => {
     display: flex;
     flex-direction: column;
     height: 70vh;
+    border-top: 1px solid var(--el-border-color);
+
 }
 
 .chat-box {
