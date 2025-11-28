@@ -1185,6 +1185,7 @@ const handleSend = async () => {
         :title="$t('ai.bot')"
         :width="dialogStyle"
         :z-index="999999"
+        align-center
         class="ai-dialog"
     >
         <div class="chat-container">
