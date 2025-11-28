@@ -1178,7 +1178,6 @@ const handleSend = async () => {
 
     <el-dialog
         v-model="dialogAiVisible"
-        :close-on-click-modal="false"
         :width="dialogStyle"
         :z-index="999999"
         class="ai-dialog"
