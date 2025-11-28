@@ -570,7 +570,10 @@ const bgStyle = computed(() => {
 })
 
 
-const messages = ref<{ role: "user" | "ai"; content: string }[]>([]);
+const messages = ref<{ role: "user" | "ai"; content: string }[]>([{
+    role: "ai",
+    content: "这里是Ai小助手，有什么可以帮助你的吗？"
+}]);
 const chatBox = ref<HTMLDivElement>();
 
 const scrollToBottom = () => {
@@ -1177,9 +1180,9 @@ const handleSend = async () => {
         v-model="dialogAiVisible"
         :close-on-click-modal="false"
         :width="dialogStyle"
-        class="ai-dialog"
         :z-index="999999"
-        title="AI 小助手"
+        class="ai-dialog"
+        title="Ai 小助手"
     >
         <div class="chat-container">
             <div ref="chatBox" class="chat-box">
