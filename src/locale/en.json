@@ -96,5 +96,8 @@
   "step.showTitle": "Show Room",
   "step.showText": "If you want your room to appear on this website, you need to complete “Step 2: Join a Room,” then enable Multiplayer in your map settings, select ‘Friends of Friends,’ and enter the map.",
   "step.expTitle": "Room Information Guide",
-  "step.expText": "You can click the avatar to view the host user's full skin, click the name to automatically copy it to the clipboard, and click the room name to view room information"
+  "step.expText": "You can click the avatar to view the host user's full skin, click the name to automatically copy it to the clipboard, and click the room name to view room information",
+  "ai.bot": "AI Assistant",
+  "ai.input": "Please enter your question...",
+  "ai.initContent": "This is the AI Assistant. How can I help you today?"
 }

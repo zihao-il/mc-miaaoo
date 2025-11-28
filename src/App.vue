@@ -11,7 +11,8 @@ import {
     Setting,
     StarFilled,
     Sunny,
-    ChatLineRound
+    ChatLineRound,
+    Promotion
 } from '@element-plus/icons-vue';
 import type {ButtonInstance, UploadFile, UploadProps, UploadUserFile, UploadInstance, UploadRawFile} from 'element-plus'
 import {ElLoading, ElMessage, ElNotification, genFileId} from "element-plus";
@@ -572,7 +573,9 @@ const bgStyle = computed(() => {
 
 const messages = ref<{ role: "user" | "ai"; content: string }[]>([{
     role: "ai",
-    content: "这里是Ai小助手，有什么可以帮助你的吗？"
+    get content() {
+        return t("ai.initContent");
+    }
 }]);
 const chatBox = ref<HTMLDivElement>();
 
@@ -599,7 +602,6 @@ const mc_ai_sse = (query: string) => {
             query,
             response_mode: "streaming",
             user: store.Xuid,
-            files: [],
         }),
     });
 };
@@ -640,8 +642,6 @@ const handleSend = async () => {
 
                 try {
                     const data = JSON.parse(jsonStr);
-
-
                     if (data.event === "message" && data.answer !== undefined) {
                         aiText += data.answer;
                         if (!aiAdded) {
@@ -657,7 +657,6 @@ const handleSend = async () => {
                         scrollToBottom();
                     }
                 } catch (err) {
-                    console.warn("解析失败：", jsonStr);
                 }
             }
         }
@@ -1178,10 +1177,10 @@ const handleSend = async () => {
 
     <el-dialog
         v-model="dialogAiVisible"
+        :title="$t('ai.bot')"
         :width="dialogStyle"
         :z-index="999999"
         class="ai-dialog"
-        title="Ai 小助手"
     >
         <div class="chat-container">
             <div ref="chatBox" class="chat-box">
@@ -1192,13 +1191,13 @@ const handleSend = async () => {
                 >
 
                     <template v-if="msg.role === 'ai'">
-                        <img alt="AI 头像" class="avatar" src="/favicon.ico"/>
+                        <el-avatar class="ai-avatar" size="default" src="/favicon.ico"/>
                         <div class="bubble">{{ msg.content }}</div>
                     </template>
 
                     <template v-else>
                         <div class="bubble">{{ msg.content }}</div>
-                        <img :src="store.Avatar" alt="用户头像" class="avatar"/>
+                        <el-avatar :src="store.Avatar" class="ai-avatar" size="default"/>
                     </template>
                 </div>
             </div>
@@ -1206,19 +1205,20 @@ const handleSend = async () => {
             <div class="input-bar">
                 <el-input
                     v-model="userInput"
+                    :placeholder="$t('ai.input')"
                     :rows="2"
-                    placeholder="请输入你的问题..."
                     resize="none"
                     type="textarea"
                     @keyup.enter="handleSend"
                 />
                 <el-button
+                    :icon="Promotion"
                     :loading="sendLoading"
                     class="send-btn"
+                    size="default"
                     type="primary"
                     @click="handleSend"
                 >
-                    发送
                 </el-button>
             </div>
         </div>
@@ -1433,6 +1433,7 @@ const handleSend = async () => {
 .chat-box {
     overflow-y: auto;
     flex: 1;
+    margin-top: 0.5em;
     padding: 0.25em;
 
 }
@@ -1440,7 +1441,7 @@ const handleSend = async () => {
 .msg {
     display: flex;
     align-items: flex-end;
-    margin: 12px 0;
+    margin: 1em 0;
 }
 
 .msg.ai {
@@ -1459,11 +1460,10 @@ const handleSend = async () => {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
-.avatar {
-    width: 36px;
-    height: 36px;
+.ai-avatar {
+
     margin: 0 8px;
-    border-radius: 50%;
+
 }
 
 .msg.user .bubble {
