@@ -60,7 +60,7 @@ const refJoinSetting = ref<ButtonInstance>();
 const refXuidSetting = ref<ButtonInstance>();
 const {width} = useWindowSize()
 const dialogStyle = computed(() => width.value > 600 ? '600px' : '90%')
-let roomInfodialogFormVisible = ref<boolean>(false);
+let roomInfoDialogFormVisible = ref<boolean>(false);
 let roomTableEmpty = ref<string>('');
 const fileList = ref<UploadUserFile[]>([])
 const bgImageRef = ref<UploadInstance>()
@@ -500,7 +500,7 @@ const showRoomInfo = async (hostName: string, session: string, roomFrom: string)
     dialogPlayerData.room_count = 0
     dialogPlayerData.room_title = hostName
     dialogPlayerData.room_members = []
-    roomInfodialogFormVisible.value = true
+    roomInfoDialogFormVisible.value = true
     try {
         const {data} = await mc_roominfo(session, roomFrom)
         if (!data.membersInfo) {
@@ -903,7 +903,7 @@ const handleSend = async () => {
                 </el-tour-step>
             </el-tour>
 
-            <el-dialog v-model="roomInfodialogFormVisible" :title="dialogPlayerData.room_title + $t('room.name')"
+            <el-dialog v-model="roomInfoDialogFormVisible" :title="dialogPlayerData.room_title + $t('room.name')"
                        :width="dialogStyle"
                        :z-index="999999"
                        height="300">
@@ -942,7 +942,7 @@ const handleSend = async () => {
                 <template #footer>
                     <div class="dialog-footer">
                         <el-tag style="float: left" type="primary">共{{ dialogPlayerData.room_count }}人</el-tag>
-                        <el-button size="small" type="primary" @click="roomInfodialogFormVisible = false">
+                        <el-button size="small" type="primary" @click="roomInfoDialogFormVisible = false">
                             {{ $t('setting.close') }}
                         </el-button>
 
