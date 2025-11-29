@@ -67,6 +67,7 @@ const bgImageRef = ref<UploadInstance>()
 const dialogAiVisible = ref<boolean>(false);
 const sendLoading = ref<boolean>(false);
 const userInput = ref<string>("");
+const isNetlify = import.meta.env.VITE_NETLIFY === 'true';
 
 const accounts = ref<any[]>([]);
 
@@ -811,26 +812,36 @@ const handleSend = async () => {
                         </el-icon>
                     </el-divider>
                     <div class="footer">
+                        <p>
+                            {{ $t('locale.link') }}
+                            <el-link href="https://t.me/MCBE_Group"
+                                     type="primary">{{ $t('locale.linkText') }}
+                            </el-link>
+                        </p>
 
-                        {{ $t('locale.link') }}
-                        <el-link href="https://t.me/MCBE_Group"
-                                 type="primary">{{ $t('locale.linkText') }}
-                        </el-link>
-                        <br>
-                        文档站
-                        <el-link href="https://docs.miaaoo.com/"
-                                 type="primary">大厅文档说明
-                        </el-link>
-                        <br>
-                        去除Ore UI版本
-                        <el-link href="https://openlist.endyun.ltd/"
-                                 type="primary">点我下载
-                        </el-link>
-                        <br>
-                        反代备用站
-                        <el-link href="https://miaaoo.netlify.app/"
-                                 type="primary">无法显示房间用这个
-                        </el-link>
+                        <p>文档站
+                            <el-link href="https://docs.miaaoo.com/"
+                                     type="primary">大厅文档说明
+                            </el-link>
+                        </p>
+
+                        <p>去除Ore UI版本
+                            <el-link href="https://openlist.endyun.ltd/"
+                                     type="primary">点我下载
+                            </el-link>
+                        </p>
+
+                        <p v-if="!isNetlify">反代备用站
+                            <el-link href="https://miaaoo.netlify.app/"
+                                     type="primary">无法显示房间用这个
+                            </el-link>
+                        </p>
+                        <p v-else>原站地址
+                            <el-link href="https://lianji.miaaoo.com/"
+                                     type="primary">lianji.miaaoo.com
+                            </el-link>
+                        </p>
+
                     </div>
                 </el-footer>
             </el-container>
