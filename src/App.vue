@@ -68,6 +68,7 @@ const dialogAiVisible = ref<boolean>(false);
 const sendLoading = ref<boolean>(false);
 const userInput = ref<string>("");
 const isNetlify = import.meta.env.VITE_NETLIFY === 'true';
+let refreshTimer: any = null
 
 const accounts = ref<any[]>([]);
 
@@ -84,6 +85,20 @@ const md = new MarkdownIt();
 
 const renderMarkdown = (text: string) => md.render(text);
 
+const requiredRoom = async (): Promise<void> => {
+    let sources = store.ShowRoom
+    const {data} = await mc_list(store.RoomNameLang);
+    room_data.value = data.results;
+    if (sources.find((source) => source.id === 0)) {
+        room_data.value = room_data.value.filter((room: any) => {
+            return !(room.customProperties.MemberCount >= room.customProperties.MaxMemberCount || room.customProperties.BroadcastSetting !== 3);
+        });
+    }
+    newRoom.value = room_data.value
+    room_count.value = room_data.value.length;
+    isNull.value = room_data.value.length === 0;
+}
+
 const getRoomData = async (): Promise<void> => {
     const loading = ElLoading.service({
         lock: true,
@@ -91,19 +106,9 @@ const getRoomData = async (): Promise<void> => {
         background: 'rgba(0, 0, 0, 0.7)',
     })
 
-    let sources = store.ShowRoom
 
     try {
-        const {data} = await mc_list(store.RoomNameLang);
-        room_data.value = data.results;
-        if (sources.find((source) => source.id === 0)) {
-            room_data.value = room_data.value.filter((room: any) => {
-                return !(room.customProperties.MemberCount >= room.customProperties.MaxMemberCount || room.customProperties.BroadcastSetting !== 3);
-            });
-        }
-        newRoom.value = room_data.value
-        room_count.value = room_data.value.length;
-        isNull.value = room_data.value.length === 0;
+        await requiredRoom()
     } catch (e) {
         ElNotification({
             title: t('locale.error'),
@@ -670,6 +675,25 @@ const handleSend = async () => {
 
     sendLoading.value = false;
 };
+
+
+watch(
+    () => store.AutoRefresh,
+    (val) => {
+        if (val) {
+
+            refreshTimer = setInterval(() => {
+                requiredRoom()
+            }, 10000)
+        } else {
+            clearInterval(refreshTimer)
+            refreshTimer = null
+        }
+    },
+    {immediate: true}
+)
+
+
 </script>
 
 <template>
@@ -1002,6 +1026,12 @@ const handleSend = async () => {
                                  @change="ShowRoomChange"/>
                 </el-checkbox-group>
                 <el-checkbox v-model="store.ShowSkin" :label="$t('setting.hideSkin')" :value="true"/>
+
+            </el-col>
+            <el-col :span="24">
+                <el-switch v-model="store.AutoRefresh"
+                           :active-text="$t('setting.autoRefresh')"
+                           :inactive-text="$t('setting.manualRefresh')" inline-prompt/>
 
             </el-col>
             <el-col :span="24">

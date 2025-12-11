@@ -16,6 +16,7 @@ export const useMCOnlineStore = defineStore('MCOnline', {
         HideCrisp: false,
         BgImage: [] as UploadUserFile[],
         BgFilter: 0,
+        AutoRefresh: false,
     }),
     actions: {},
     persist: {

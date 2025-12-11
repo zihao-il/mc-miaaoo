@@ -51,6 +51,8 @@
   "setting.resetGuide": "重置新手引导",
   "setting.setBgImage": "设置背景图",
   "setting.BgImageFilter": "背景图模糊度：",
+  "setting.autoRefresh": "自动刷新房间列表",
+  "setting.manualRefresh": "手动刷新房间列表",
   "locale.loading": "加载中...",
   "mode.survival": "生存模式",
   "mode.hardcore": "极限模式",

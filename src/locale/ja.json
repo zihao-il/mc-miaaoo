@@ -51,6 +51,8 @@
   "setting.resetGuide": "チュートリアルをリセット",
   "setting.setBgImage": "背景画像を設定",
   "setting.BgImageFilter": "背景画像のぼかし度：",
+  "setting.autoRefresh": "部屋リストを自動更新",
+  "setting.manualRefresh": "部屋リストを手動更新",
   "locale.loading": "NOW LOADING",
   "mode.survival": "生存",
   "mode.hardcore": "ハードコア",
