@@ -312,7 +312,7 @@ const wsJoin = async (roomFrom: string, id: string, name: string): Promise<void>
                         cursor: 'pointer',
                     },
                     onClick: () => {
-                        window.location.href = "minecraft://?addExternalServer=本地服务器|127.0.0.1:19132";
+                        window.location.href = `minecraft://activityHandleJoin/?handle=${id}`;
                     },
                 },
                 t('locale.mcStart')
