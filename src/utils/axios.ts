@@ -13,34 +13,32 @@ const request: AxiosInstance = axios.create({
 
 export const mc_list = (lang?: string): Promise<any> => {
     return request({
-        url: '/list',
+        url: '/v2/list',
         method: 'get',
         ...(lang ? {params: {lang}} : {})
     })
 }
 
-export const mc_join = (roomFrom: string, addId: string, roomId: string, sessionName: string, userXuid: string): Promise<any> => {
+export const mc_join = (roomFrom: string, addId: string, handleId: string, sessionName: string, userXuid: string): Promise<any> => {
     return request({
-        url: '/join',
+        url: '/v2/join',
         method: 'post',
         data: {
-            version: '1.0.0',
+            apiversion: 2,
             joininformation: {
                 addid: addId,
                 roomfrom: roomFrom,
-                roomid: roomId,
+                handleid: handleId,
                 sessionname: sessionName,
-            },
-            invitecontrol: {
                 userxuid: userXuid,
-            }
+            },
         }
     })
 }
 
 export const mc_account = (): Promise<any> => {
     return request({
-        url: '/account',
+        url: '/v2/account',
         method: 'get',
     })
 }
@@ -64,5 +62,12 @@ export const mc_roominfo = (session: string, roomFrom: string): Promise<any> => 
             session: session,
             roomfrom: roomFrom,
         }
+    })
+}
+
+export const mc_refresh_followers = (): Promise<any> => {
+    return request({
+        url: '/refreshFollowers',
+        method: 'get',
     })
 }

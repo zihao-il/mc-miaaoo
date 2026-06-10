@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {mc_account, mc_join, mc_list, mc_profile, mc_roominfo} from "./utils/axios";
+import {mc_account, mc_join, mc_list, mc_profile, mc_roominfo, mc_refresh_followers} from "./utils/axios";
 import {computed, h, onMounted, reactive, ref, watch, nextTick} from "vue";
 import {useWindowSize} from '@vueuse/core'
 import {
@@ -414,6 +414,7 @@ const getXuid = async (gt: string): Promise<void> => {
             type: 'success',
             zIndex: 99999
         });
+        await mc_refresh_followers()
     } catch (e) {
         ElNotification({
             title: t('setting.xuidError'),
