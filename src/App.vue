@@ -281,11 +281,19 @@ const wsJoin = async (roomFrom: string, id: string, name: string): Promise<void>
     const Friends = JSON.parse(store.Friends)
     const setId = String(Friends.id)
     try {
-        await mc_join(roomFrom, setId, id, name, store.Xuid);
-    } catch (e) {
+         await mc_join(roomFrom, setId, id, name, store.Xuid);
+
+    } catch (e: any) {
+        let lang
+        if (store.Language == "zhHans") {
+            lang = "message_zh_CN"
+        } else {
+            lang = "message"
+        }
+
         ElNotification({
             title: t('locale.JoinsError'),
-            message: t('locale.JoinsErrorMessage'),
+            message: e?.response?.data[lang],
             type: 'error',
             zIndex: 9999
         });
@@ -414,7 +422,6 @@ const getXuid = async (gt: string): Promise<void> => {
             type: 'success',
             zIndex: 99999
         });
-        await mc_refresh_followers()
     } catch (e) {
         ElNotification({
             title: t('setting.xuidError'),
@@ -422,6 +429,10 @@ const getXuid = async (gt: string): Promise<void> => {
             type: 'error',
             zIndex: 99999
         });
+    }
+    try {
+        await mc_refresh_followers()
+    } catch (err) {
     }
 
 
