@@ -14,11 +14,11 @@
     "@intlify/unplugin-vue-i18n": "^11.2.3",
     "@vueuse/core": "^14.3.0",
     "axios": "^1.17.0",
-    "element-plus": "^2.14.1",
+    "element-plus": "^2.14.2",
     "markdown-it": "^14.2.0",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
-    "vue": "^3.5.35",
+    "vue": "^3.5.38",
     "vue-i18n": "^11.4.5"
   },
   "devDependencies": {
